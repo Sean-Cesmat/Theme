@@ -1,5 +1,5 @@
 <?php
-$layout = get_option(BRANKIC_VAR_PREFIX."boxed_stretched");
+$layout = of_get_option(BRANKIC_VAR_PREFIX."boxed_stretched");
 if (isset($_GET["layout"])) 
 {
     if (htmlspecialchars(strip_tags($_GET["layout"])) == "stretched") $layout = "stretched" ;
@@ -26,16 +26,17 @@ if ($page_template != "page-contact-2")
     
     
     <!-- START FOOTER -->
-   
-   	
+    
     <div id="footer">
-    	<div id="footerMountains">
-    	</div> 
-    	<div id="footerMountDivider"></div>
-
+    
         <div id="footer-content">
 <?php
 $all_sidebars = wp_get_sidebars_widgets();
+if (!isset($all_sidebars["Footer_1st_box"])) { $all_sidebars["Footer_1st_box"] = null ;};
+if (!isset($all_sidebars["Footer_2nd_box"])) { $all_sidebars["Footer_2nd_box"] = null ;};
+if (!isset($all_sidebars["Footer_3rd_box"])) { $all_sidebars["Footer_3rd_box"] = null ;};
+if (!isset($all_sidebars["Footer_4th_box"])) { $all_sidebars["Footer_4th_box"] = null ;};
+
 if (count($all_sidebars["Footer_1st_box"]) > 0 || count($all_sidebars["Footer_2nd_box"]) > 0 || count($all_sidebars["Footer_3rd_box"]) > 0 || count($all_sidebars["Footer_4th_box"]) > 0)
 {
 ?>                    
@@ -76,14 +77,6 @@ if (count($all_sidebars["Footer_1st_box"]) > 0 || count($all_sidebars["Footer_2n
             
         </div><!--END FOOTER-CONTENT-->        
     
-    	<div id="verisign">
-    		<img src="<?php bloginfo('template_directory'); ?>/images/verisign.png" alt="verisign" width="" height="" />
-    	</div>
-    	<div id="paypalLogo">
-    		<img src="<?php bloginfo('template_directory'); ?>/images/paypal.png" alt="verisign" width="" height="" />
-    	</div>
-    
-    
     </div><!--END FOOTER-->
     
     <!-- END FOOTER -->    
@@ -98,24 +91,37 @@ if ($layout == "boxed")
 }
 ?> 
 
-          
-
-
-
 <script type='text/javascript'>
 jQuery(document).ready(function($){
 <?php
-$bg_image_global = get_option(BRANKIC_VAR_PREFIX."background_image");
-$tile_background_global = get_option(BRANKIC_VAR_PREFIX."tile_background");
-$bg_image_local = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."background_image", true);
+if (is_single())
+{
+?>
+    $(".post-content img").each(function(){
+		var img_class =($(this).attr("class"));	
+		//alert(img_class);
+		if (img_class != undefined) {
+			if (img_class.indexOf("wp-image") > -1) {
+				$(this).parent("a").attr("data-rel", "prettyPhoto[]");
+			}
+		}
+	})
+<?php
+}
+//$page_object = get_queried_object();
+$page_id     = get_queried_object_id();
+
+$bg_image_global = of_get_option(BRANKIC_VAR_PREFIX."background_image");
+$tile_background_global = of_get_option(BRANKIC_VAR_PREFIX."tile_background");
+$bg_image_local = get_post_meta($page_id, BRANKIC_VAR_PREFIX."background_image", true);
 
 if ($bg_image_local != "")
 { 
     $bg_image = $bg_image_local;
-    $image_id = MultiPostThumbnails::get_post_thumbnail_id( 'page', $bg_image, get_the_ID() );
+    $image_id = MultiPostThumbnails::get_post_thumbnail_id( 'page', $bg_image, $page_id );
     $page_bg_image = wp_get_attachment_image_src( $image_id, "page_" . $bg_image );
     $bg_image = $page_bg_image[0];
-    $tile_background = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."tile_background", true);
+    $tile_background = get_post_meta($page_id, BRANKIC_VAR_PREFIX."tile_background", true);
 }
 else
 {
@@ -137,27 +143,104 @@ if ($bg_image != "" && $tile_background != "yes")
 }
  
 ?>
-})
-<?php echo get_option(BRANKIC_VAR_PREFIX."extra_javascript"); ?> 
+<?php
+if (get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."add_class_title", true) != "no")
+{
+?>
+    $(".one :header, #inner-content :header").addClass("title");
+    $(".team-member-info :header, .no_title").removeClass("title");   
+<?php
+} 
+?>
 <?php 
 if (is_single()) {
 ?>
 /*--------------------------------------------------
          COMMENT FORM CODE
 ---------------------------------------------------*/
-jQuery(document).ready(function($){
     $(".comment-list li").addClass("comment");
     $("#comment-form").addClass("form");
     $("#comment-form #submit").addClass("submit");
     $("#reply-title").addClass("title");
     $("#reply-title").after("<p><?php _e('Make sure you fill in all mandatory fields.', BRANKIC_THEME_SHORT); ?></p>")
-});
 <?php
 }  
 ?>
+})
+<?php echo of_get_option(BRANKIC_VAR_PREFIX."extra_javascript"); ?> 
+<?php 
+if (of_get_option(BRANKIC_VAR_PREFIX."short_pages_fix") == "yes") {
+?>
+// short pages
+jQuery(window).load(function() { 
+
+	var wrapper_height = jQuery("#wrapper").outerHeight();
+	var footer_height = jQuery("#footer").outerHeight();
+	var window_height = jQuery(window).height();
+	var content_height = wrapper_height + footer_height
+	
+	if (jQuery("#footer").parents("#wrapper").length == 1) {
+		content_height = wrapper_height;
+	}
+	
+	if (window_height > content_height) {
+		// if streched layout we don't need this line. if footer in wrapper = boxed
+		if (jQuery("#footer").parents("#wrapper").length == 1) {
+			jQuery("#wrapper, .content-wrapper").css("height", "100%");
+		}
+		
+		if (jQuery(".portfolio-grid #thumbs li").length <= 4) {
+			jQuery("#footer").css({"position": "absolute", "bottom": "0px"});
+		}
+		
+	}
+
+	if (jQuery("#wpadminbar").length > 0){
+		wp_admin_height = parseInt(jQuery("#wpadminbar").height()) + "px";
+		
+	}
+	
+	jQuery(window).resize(function() {
+
+		var wrapper_height = jQuery("#wrapper").outerHeight();
+		var footer_height = jQuery("#footer").outerHeight();
+		var window_height = jQuery(window).height();
+		var content_height = wrapper_height + footer_height
+		
+		if (jQuery("#footer").parents("#wrapper").length == 1) {
+			content_height = wrapper_height;
+		}
+		
+		if (window_height > content_height) {
+			// if streched layout we don't need this line. if footer in wrapper = boxed
+			if (jQuery("#footer").parents("#wrapper").length == 1) {
+				jQuery("#wrapper, .content-wrapper").css("height", "100%");
+			} 
+						
+			if (jQuery(".portfolio-grid #thumbs li").length <= 4) {
+				jQuery("#footer").css({"position": "absolute", "bottom": "0px"});
+			}
+			
+		} else {
+			jQuery("#wrapper, .content-wrapper").css("height", "auto");
+			jQuery("#footer").css({"position": "relative", "bottom": "auto"});
+		}
+	
+		if (jQuery("#wpadminbar").length > 0){
+			wp_admin_height = parseInt(jQuery("#wpadminbar").height()) + "px";
+			
+		}
+
+
+	});
+
+ })
+<?php
+}
+?>
 </script>
 <?php
-if (get_option(BRANKIC_VAR_PREFIX."show_panel") == "yes")
+if (of_get_option(BRANKIC_VAR_PREFIX."show_panel") == "yes")
 {
 ?>
 <!-- Theme Option --> 
@@ -215,24 +298,18 @@ if (get_option(BRANKIC_VAR_PREFIX."show_panel") == "yes")
 <?php
 }
 ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."extra_css") != "")
+
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."extra_css") != "")
 {
 ?> 
 <style type="text/css">
 <!--
-<?php echo get_option(BRANKIC_VAR_PREFIX."extra_css"); ?>
+<?php echo of_get_option(BRANKIC_VAR_PREFIX."extra_css"); ?>
 -->
 </style>
 <?php
 }
 ?>
 <?php wp_footer(); ?>
-
-
-
-
-		
-
-
 </body>
 </html>

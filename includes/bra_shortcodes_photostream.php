@@ -41,6 +41,12 @@
   </p>
   
   <p>
+    <label>API key or token if you're showing your Flickr or Instagram feed. <a href="https://www.flickr.com/services/apps/create/noncommercial/">Apply here for Flickr key</a> and <a href="http://www.brankic1979.com/instagram/">here for Instagram token</a></label>
+      <input type="text" name="api_token" id="api_token" value="" size="50"/>
+    
+  </p>
+  
+  <p>
       <input type="submit" name="Insert" id="bra_insert_shortcode_button" value="Submit" />
   </p>
 </form>

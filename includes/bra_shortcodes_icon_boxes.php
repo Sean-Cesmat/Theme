@@ -1,18 +1,17 @@
+<?php
+
+if (file_exists("../../../../wp-blog-header.php")) require_once('../../../../wp-blog-header.php');
+if (file_exists("../../../wp-blog-header.php")) require_once('../../../wp-blog-header.php');
+if (file_exists("../../wp-blog-header.php")) require_once('../../wp-blog-header.php');
+if (file_exists("../wp-blog-header.php")) require_once('../wp-blog-header.php');
+if (file_exists("/wp-blog-header.php")) require_once('/wp-blog-header.php');
+if (file_exists("wp-blog-header.php")) require_once('wp-blog-header.php');
+
+?>
 
 <div id="brankic_shortcode_form_wrapper">
 <form id="brankic_shortcode_form" name="brankic_shortcode_form" method="post" action="">
-<script type="text/javascript">
-jQuery(document).ready(function($){
-	var theme_folder = $("#bra_admin_style-css").attr("href");
-	theme_folder = theme_folder.substr(0, theme_folder.indexOf("includes/bra_admin_style.css"));
-	$("#icon_4 option, #icon_1 option, #icon_2 option, #icon_3 option").each(function(){
-		var old_value = $(this).attr("value")
-		var new_value = theme_folder + old_value.substr(3);
-		$(this).attr("value", new_value);
-		$(this).html(old_value.substr(16));
-	})
-})
-</script>
+
   <p>
     <label>Caption 1</label>
       <input type="text" name="caption_1" id="caption_1" value="Branding" size="50"/>
@@ -26,12 +25,14 @@ jQuery(document).ready(function($){
   <p>
     <label>Icon 1</label>
       <select name="icon_1" id="icon_1">
+	       <option value=""></option>
           <?php
           $icons_urls = glob("../images/icons/*.*");
           foreach ($icons_urls as $icon_url)
           {
+		  $real_icon_url = get_template_directory_uri() . substr($icon_url, 2);
           ?>
-            <option value="<?php echo $icon_url; ?>"><?php echo $icon_url; ?></option>
+            <option value="<?php echo $real_icon_url; ?>"><?php echo $icon_url; ?></option>
           <?php
           }
           ?>
@@ -67,12 +68,14 @@ jQuery(document).ready(function($){
   <p>
     <label>Icon 2</label>
       <select name="icon_2" id="icon_2">
+	  <option value=""></option>
           <?php
           $icons_urls = glob("../images/icons/*.*");
           foreach ($icons_urls as $icon_url)
           {
+		  $real_icon_url = get_template_directory_uri() . substr($icon_url, 2);
           ?>
-            <option value="<?php echo $icon_url; ?>"><?php echo $icon_url; ?></option>
+            <option value="<?php echo $real_icon_url; ?>"><?php echo $icon_url; ?></option>
           <?php
           }
           ?>
@@ -107,13 +110,15 @@ jQuery(document).ready(function($){
   </p>
   <p>
     <label>Icon 3</label>
+	<option value=""></option>
       <select name="icon_3" id="icon_3">
           <?php
           $icons_urls = glob("../images/icons/*.*");
           foreach ($icons_urls as $icon_url)
           {
+		  $real_icon_url = get_template_directory_uri() . substr($icon_url, 2);
           ?>
-            <option value="<?php echo $icon_url; ?>"><?php echo $icon_url; ?></option>
+            <option value="<?php echo $real_icon_url; ?>"><?php echo $icon_url; ?></option>
           <?php
           }
           ?>
@@ -149,12 +154,14 @@ jQuery(document).ready(function($){
   <p>
     <label>Icon 4</label>
       <select name="icon_4" id="icon_4">
+	  <option value=""></option>
           <?php
           $icons_urls = glob("../images/icons/*.*");
           foreach ($icons_urls as $icon_url)
           {
+		  $real_icon_url = get_template_directory_uri() . substr($icon_url, 2);
           ?>
-            <option value="<?php echo $icon_url; ?>"><?php echo $icon_url; ?></option>
+            <option value="<?php echo $real_icon_url; ?>"><?php echo $icon_url; ?></option>
           <?php
           }
           ?>
@@ -176,11 +183,44 @@ jQuery(document).ready(function($){
   </p>
   
   <hr />
-  
 
-  
   <p>
       <input type="submit" name="Insert" id="bra_insert_shortcode_button" value="Submit" />
   </p>
-</form>
+<script>
+            document.getElementById( 'bra_insert_shortcode_button' ).onclick = function(){
+				var caption_1 = document.getElementById( 'caption_1' ).value;
+				var url_1 = document.getElementById( 'url_1' ).value;
+				var icon_1 = document.getElementById( 'icon_1' ).value;
+				var target_1 = document.getElementById( 'target_1' ).value;
+				var about_1 = document.getElementById( 'about_1' ).value;
+				
+				var caption_2 = document.getElementById( 'caption_2' ).value;
+				var url_2 = document.getElementById( 'url_2' ).value;
+				var icon_2 = document.getElementById( 'icon_2' ).value;
+				var target_2 = document.getElementById( 'target_2' ).value;
+				var about_2 = document.getElementById( 'about_2' ).value;
+				
+				var caption_3 = document.getElementById( 'caption_3' ).value;
+				var url_3 = document.getElementById( 'url_3' ).value;
+				var icon_3 = document.getElementById( 'icon_3' ).value;
+				var target_3 = document.getElementById( 'target_3' ).value;
+				var about_3 = document.getElementById( 'about_3' ).value;
+				
+				var caption_4 = document.getElementById( 'caption_4' ).value;
+				var url_4 = document.getElementById( 'url_4' ).value;
+				var icon_4 = document.getElementById( 'icon_4' ).value;
+				var target_4 = document.getElementById( 'target_4' ).value;
+				var about_4 = document.getElementById( 'about_4' ).value;
+
+				var shortcode = "[bra_icon_boxes_container] [bra_icon_box caption='" + caption_1 +"' url='" + url_1 +"'  icon='" + icon_1 + "' target='" + target_1 + "']" + about_1 + "[/bra_icon_box]";
+				shortcode += "[bra_icon_box caption='" + caption_2 +"' url='" + url_2 +"'  icon='" + icon_2 + "' target='" + target_2 + "']" + about_2 + "[/bra_icon_box]";
+				shortcode += "[bra_icon_box caption='" + caption_3 +"' url='" + url_3 +"'  icon='" + icon_3 + "' target='" + target_3 + "']" + about_3 + "[/bra_icon_box]";
+				shortcode += "[bra_icon_box caption='" + caption_4 +"' url='" + url_4 +"'  icon='" + icon_4 + "' target='" + target_4 + "']" + about_4 + "[/bra_icon_box][/bra_icon_boxes_container]";
+                
+				window.parent.tinyMCE.activeEditor.execCommand( 'mceInsertContent', 0, shortcode );
+                window.close();
+            };
+</script>
+  </form>
 </div>

@@ -11,30 +11,30 @@ $featured_image_array = wp_get_attachment_image_src( get_post_thumbnail_id(), 's
 $featured_image = $featured_image_array[0];
 $sidebar = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."select_sidebar", true);
 
-$bra_contact_page_field_1 = get_option(BRANKIC_VAR_PREFIX."field_1");
-$bra_contact_page_field_1_title = get_option(BRANKIC_VAR_PREFIX."field_1_caption");
-$bra_contact_page_field_1_required = get_option(BRANKIC_VAR_PREFIX."field_1_required");
-$bra_contact_page_field_1_select = get_option(BRANKIC_VAR_PREFIX."field_1_select");
+$bra_contact_page_field_1 = of_get_option(BRANKIC_VAR_PREFIX."field_1");
+$bra_contact_page_field_1_title = of_get_option(BRANKIC_VAR_PREFIX."field_1_caption");
+$bra_contact_page_field_1_required = of_get_option(BRANKIC_VAR_PREFIX."field_1_required");
+$bra_contact_page_field_1_select = of_get_option(BRANKIC_VAR_PREFIX."field_1_select");
 
-$bra_contact_page_field_2 = get_option(BRANKIC_VAR_PREFIX."field_2");
-$bra_contact_page_field_2_title = get_option(BRANKIC_VAR_PREFIX."field_2_caption");
-$bra_contact_page_field_2_required = get_option(BRANKIC_VAR_PREFIX."field_2_required");
-$bra_contact_page_field_2_select = get_option(BRANKIC_VAR_PREFIX."field_2_select");
+$bra_contact_page_field_2 = of_get_option(BRANKIC_VAR_PREFIX."field_2");
+$bra_contact_page_field_2_title = of_get_option(BRANKIC_VAR_PREFIX."field_2_caption");
+$bra_contact_page_field_2_required = of_get_option(BRANKIC_VAR_PREFIX."field_2_required");
+$bra_contact_page_field_2_select = of_get_option(BRANKIC_VAR_PREFIX."field_2_select");
 
-$bra_contact_page_field_3 = get_option(BRANKIC_VAR_PREFIX."field_3");
-$bra_contact_page_field_3_title = get_option(BRANKIC_VAR_PREFIX."field_3_caption");
-$bra_contact_page_field_3_required = get_option(BRANKIC_VAR_PREFIX."field_3_required");
-$bra_contact_page_field_3_select = get_option(BRANKIC_VAR_PREFIX."field_3_select");
+$bra_contact_page_field_3 = of_get_option(BRANKIC_VAR_PREFIX."field_3");
+$bra_contact_page_field_3_title = of_get_option(BRANKIC_VAR_PREFIX."field_3_caption");
+$bra_contact_page_field_3_required = of_get_option(BRANKIC_VAR_PREFIX."field_3_required");
+$bra_contact_page_field_3_select = of_get_option(BRANKIC_VAR_PREFIX."field_3_select");
 
-$bra_contact_page_field_4 = get_option(BRANKIC_VAR_PREFIX."field_4");
-$bra_contact_page_field_4_title = get_option(BRANKIC_VAR_PREFIX."field_4_caption");
-$bra_contact_page_field_4_required = get_option(BRANKIC_VAR_PREFIX."field_4_required");
-$bra_contact_page_field_4_select = get_option(BRANKIC_VAR_PREFIX."field_4_select");
+$bra_contact_page_field_4 = of_get_option(BRANKIC_VAR_PREFIX."field_4");
+$bra_contact_page_field_4_title = of_get_option(BRANKIC_VAR_PREFIX."field_4_caption");
+$bra_contact_page_field_4_required = of_get_option(BRANKIC_VAR_PREFIX."field_4_required");
+$bra_contact_page_field_4_select = of_get_option(BRANKIC_VAR_PREFIX."field_4_select");
 
-$bra_contact_page_field_5 = get_option(BRANKIC_VAR_PREFIX."field_5");
-$bra_contact_page_field_5_title = get_option(BRANKIC_VAR_PREFIX."field_5_caption");
-$bra_contact_page_field_5_required = get_option(BRANKIC_VAR_PREFIX."field_5_required");
-$bra_contact_page_field_5_select = get_option(BRANKIC_VAR_PREFIX."field_5_select"); 
+$bra_contact_page_field_5 = of_get_option(BRANKIC_VAR_PREFIX."field_5");
+$bra_contact_page_field_5_title = of_get_option(BRANKIC_VAR_PREFIX."field_5_caption");
+$bra_contact_page_field_5_required = of_get_option(BRANKIC_VAR_PREFIX."field_5_required");
+$bra_contact_page_field_5_select = of_get_option(BRANKIC_VAR_PREFIX."field_5_select"); 
 
 if (get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."hide_title", true) != "yes")
 {
@@ -65,7 +65,7 @@ if ($featured_image != "")
         <div id="bra-map-fullwidth" class="google-map fullwidth"></div>
 <script type="text/javascript">  
 jQuery(document).ready(function($) {
-  $('#bra-map-fullwidth').bra_google_map({location: '<?php echo get_option(BRANKIC_VAR_PREFIX."contact_form_location"); ?>', zoom: <?php echo get_option(BRANKIC_VAR_PREFIX."contact_form_zoom"); ?>});
+  $('#bra-map-fullwidth').bra_google_map({location: '<?php echo of_get_option(BRANKIC_VAR_PREFIX."contact_form_location"); ?>', zoom: <?php echo of_get_option(BRANKIC_VAR_PREFIX."contact_form_zoom"); ?>});
 });
 </script>
         
@@ -102,7 +102,7 @@ the_content();
                 
     <div class="one-half last only_contact">
             
-        <h3><?php echo get_option(BRANKIC_VAR_PREFIX."contact_form_title"); ?></h3>
+        <h3><?php echo of_get_option(BRANKIC_VAR_PREFIX."contact_form_title"); ?></h3>
                 
         <form id="contact-form" class="form" method="post">
             <ul> 
@@ -112,11 +112,11 @@ the_content();
         bra_contact_page_create_field($bra_contact_page_field_3, $bra_contact_page_field_3_title, $bra_contact_page_field_3_required, $bra_contact_page_field_3_select);
         bra_contact_page_create_field($bra_contact_page_field_4, $bra_contact_page_field_4_title, $bra_contact_page_field_4_required, $bra_contact_page_field_4_select);
         bra_contact_page_create_field($bra_contact_page_field_5, $bra_contact_page_field_5_title, $bra_contact_page_field_5_required, $bra_contact_page_field_5_select);   
-if (get_option(BRANKIC_VAR_PREFIX."use_captcha") == "yes") 
+if (of_get_option(BRANKIC_VAR_PREFIX."use_captcha") == "yes") 
 {
 require_once('includes/recaptchalib.php');
-$publickey = get_option(BRANKIC_VAR_PREFIX."recaptcha_public_api");
-$privatekey = get_option(BRANKIC_VAR_PREFIX."recaptcha_private_api");
+$publickey = of_get_option(BRANKIC_VAR_PREFIX."recaptcha_public_api");
+$privatekey = of_get_option(BRANKIC_VAR_PREFIX."recaptcha_private_api");
 if ($publickey == "") $publickey = "6Le5jNMSAAAAAO4zTrbL1-S2WY9HOD-1HynRDun3";
 if ($privatekey == "") $privatekey = "6Le5jNMSAAAAALuhzPiADxAD44e9YJ7vUIlHQ3GG ";
 ?>
@@ -176,7 +176,7 @@ jQuery(document).ready(function($){
                     challengeField = "";
                     responseField = "";
                     <?php
-                    if (get_option(BRANKIC_VAR_PREFIX."use_captcha") == "yes") 
+                    if (of_get_option(BRANKIC_VAR_PREFIX."use_captcha") == "yes") 
                     {
                     ?>
                     challengeField = $("input#recaptcha_challenge_field").val();
@@ -216,7 +216,7 @@ jQuery(document).ready(function($){
                     else
                     {
                         <?php
-                        if (get_option(BRANKIC_VAR_PREFIX."use_captcha") == "yes")
+                        if (of_get_option(BRANKIC_VAR_PREFIX."use_captcha") == "yes")
                         {
                         ?>
                         $("#recaptcha_response_field").parent().append('<span class="contact-error extra-padding"><?php _e('Invalid Captcha', BRANKIC_THEME_SHORT); ?></span>');
@@ -251,16 +251,24 @@ jQuery(document).ready(function($){
          CONTACT POPUP WINDOW CODE
 ---------------------------------------------------*/
 jQuery(document).ready(function($) {
-    $('a.contact-button').click(function() {        
+    $('a.contact-button').click(function() { 
+        var curY = $(this).offset().top;       
         var loginBox = $(this).attr('href');
         //Fade in the Popup
         $(loginBox).fadeIn(300);        
         var popMargTop = ($(loginBox).height() + 24) / 2; 
-        var popMargLeft = ($(loginBox).width() + 24) / 2;         
+        var popMargLeft = ($(loginBox).width() + 24) / 2; 
+        //alert(popMargTop + " " + curHeight);       
         $(loginBox).css({ 
             'margin-top' : -popMargTop,
             'margin-left' : -popMargLeft
-        });        
+        });
+        var newY = $(loginBox).offset().top; 
+        if (newY < 0){
+            $(loginBox).css({ 
+                'margin-top' : 0
+            });
+        }      
         $('body').append('<div id="contact-mask"></div>');
         $('#contact-mask').fadeIn(300);        
         return false;

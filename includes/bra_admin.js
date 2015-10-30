@@ -1,6 +1,21 @@
 jQuery(document).ready(function($) {					
 								
-	
+// aside   =>  style1
+// gallery =>  style2
+// quote   =>  style3
+// status  =>  style4
+// video   =>  style5
+// audio   =>  style6
+// chat    =>  portfolio
+
+	$("label.post-format-aside").html("Style 1").removeClass("post-format-aside").addClass("post-format-standard");
+	$("label.post-format-gallery").html("Style 2").removeClass("post-format-gallery").addClass("post-format-standard");
+	$("label.post-format-quote").html("Style 3").removeClass("post-format-quote").addClass("post-format-standard");
+	$("label.post-format-status").html("Style 4").removeClass("post-format-status").addClass("post-format-standard");
+	$("label.post-format-video").html("Style 5").removeClass("post-format-video").addClass("post-format-standard");
+	$("label.post-format-audio").html("Style 6").removeClass("post-format-audio").addClass("post-format-standard");
+	$("label.post-format-chat").html("Portfolio").removeClass("post-format-chat").addClass("post-format-standard");
+		
 	var BRANKIC_VAR_PREFIX = $("meta[name=BRANKIC_VAR_PREFIX]").attr("content");
 	
 	$("#" + BRANKIC_VAR_PREFIX + "bg_image_show img").css("width", "400px");
@@ -97,56 +112,51 @@ jQuery(document).ready(function($) {
 *******************/
 	for (i = 1 ; i <= 5 ; i++){
 		field_id = "#" + BRANKIC_VAR_PREFIX + "field_" + i;
-		//alert(field_id);
-		
-		$(".field_" + i + "_caption").hide();
-		$(".field_" + i + "_required").hide();
-		$(".field_" + i + "_select").hide();
+		field_id_ = BRANKIC_VAR_PREFIX + "field_" + i;
 		
 		value = $(field_id).attr('value');
-		
+
 		if (value != "Nothing") {
-			$(".field_" + i + "_caption").show();
-			$(".field_" + i + "_required").show();
+			$("#section-" + field_id_ + "_caption").removeClass("hidden");
+			$("#section-" + field_id_ + "_required").removeClass("hidden");
 		}
-		if (value == "select") $(".field_" + i + "_select").show();
+		if (value == "select") $("#section-" + field_id_ + "_select").removeClass("hidden");
 
 	}
 
 		
 	field_id = "#" + BRANKIC_VAR_PREFIX + "field_1";
-	//alert("select [id^='" + BRANKIC_VAR_PREFIX + "field_']")
+
 	$("[id^='" + BRANKIC_VAR_PREFIX + "field_']").change(function()
 	{
 		value = $(this).attr('value');
 		
 		var input_id = $(this).attr("id")
 		input_id = input_id.substr(input_id.length - 1);
-		//alert(input_id)
 	   
 	   if (value == "select") {
-		   $(".field_" + input_id + "_select").show();
-		   $(".field_" + input_id + "_caption").show();
-		   $(".field_" + input_id + "_required").show();
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_select").removeClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_caption").removeClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_required").removeClass("hidden");
 	   }
 	   if (value == "text") {
-		   $(".field_" + input_id + "_select").hide();
-		   $(".field_" + input_id + "_caption").show();
-		   $(".field_" + input_id + "_required").show();
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_select").addClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_caption").removeClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_required").removeClass("hidden");
 	   }
 	   if (value == "textarea") {
-		   $(".field_" + input_id + "_select").hide();
-		   $(".field_" + input_id + "_caption").show();
-		   $(".field_" + input_id + "_required").show();
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_select").addClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_caption").removeClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_required").removeClass("hidden");
 	   }
 	   if (value == "Nothing") {
-		   $(".field_" + input_id + "_select").hide();
-		   $(".field_" + input_id + "_caption").hide();
-		   $(".field_" + input_id + "_required").hide();
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_select").addClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_caption").addClass("hidden");
+		   $("#section-" + BRANKIC_VAR_PREFIX + "field_" + input_id + "_required").addClass("hidden");
 	   }	
 	});
 
-// 	NOTIFICATION SHOW/HID
+// 	NOTIFICATION SHOW/HIDE
 	field_id = "#" + BRANKIC_VAR_PREFIX + "notification_what_to_show";
 	value = $(field_id).attr('value');
 	   if (value == "") {

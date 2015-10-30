@@ -3,7 +3,7 @@
 			
 <?php 
 $comments = comments_open() && get_option("default_comment_status ") == "open"; 
-$blog_single_page_style= get_option(BRANKIC_VAR_PREFIX."blog_single_page_style");
+$blog_single_page_style= of_get_option(BRANKIC_VAR_PREFIX."blog_single_page_style");
 
 if (have_posts()) : while(have_posts()) : the_post(); 
 $subtitle = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."subtitle", true);
@@ -51,7 +51,7 @@ jQuery(document).ready(function($){
     <div class="two-third last">
 <?php
 $additional_html = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."additional_html", true);   
-if (extra_images_exists()) include ("slider.inc.php");
+if (extra_images_exists() && !post_password_required()) include ("slider.inc.php");
 
 $video_link = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."video_link", true);
 
@@ -81,7 +81,7 @@ if ($video_link != "")
 echo $additional_html; 
 ?> 
 <?php 
-if (get_option(BRANKIC_VAR_PREFIX."show_share") == "yes") 
+if (of_get_option(BRANKIC_VAR_PREFIX."show_share") == "yes") 
 {
 ?>
 <div class="one">

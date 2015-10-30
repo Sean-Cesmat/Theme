@@ -16,8 +16,6 @@ $featured_image_array = wp_get_attachment_image_src( get_post_thumbnail_id(), 's
 $featured_image = $featured_image_array[0]; 
 $hide_featured_image = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."hide_featured_image", true); 
 $sidebar = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."select_sidebar", true);
-$hide_no_of_comments = get_option(BRANKIC_VAR_PREFIX."hide_no_of_comments");
-if ($hide_no_of_comments == "yes" && get_comments_number() == 0) $hide_no_of_comments = "yes"; else $hide_no_of_comments = "no"; 
 
 if ( get_query_var('paged') ) 
 {
@@ -94,6 +92,8 @@ else
 while ( $wp_query->have_posts() ) : $wp_query->the_post();
 $featured_image_array = wp_get_attachment_image_src( get_post_thumbnail_id(), 'single-post-thumbnail' ); 
 $featured_image = $featured_image_array[0];
+$hide_no_of_comments = of_get_option(BRANKIC_VAR_PREFIX."hide_no_of_comments");
+if ($hide_no_of_comments == "yes" && get_comments_number() == 0) $hide_no_of_comments = "yes"; else $hide_no_of_comments = "no";
 ?>
 
             <div class="post">
@@ -104,9 +104,9 @@ $featured_image = $featured_image_array[0];
                 
                 <div class="post-meta">                
                     <ul>
-                        <li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_authors_blog_page") == "yes") { ?><li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
                     </ul>
                 </div><!--END POST-META--> 
                 
@@ -142,7 +142,7 @@ $featured_image = $featured_image_array[0];
                         if (!$sidebar) $img_width = 950; else $img_width = 700;
                     ?>
                         <?php if (extra_images_exists()) { include ("slider.inc.php"); } else { ?>         
-                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="" width="<?php echo $img_width; ?>" /></a>
+                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ; ?>" width="<?php echo $img_width; ?>" /></a>
                         <?php } ?>
                     <?php } ?> 
                 </div><!--END POST-MEDIA-->

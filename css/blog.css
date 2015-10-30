@@ -176,6 +176,7 @@ ul#recentcomments li, ul.bra_recent_entries li {
 	width: 600px;
 	float: right;
 }
+.blog5 .post-media, .blog6 .post-media {float:left;}
 .one.blog5 .post-title, .one.blog5 .post-meta, .one.blog6 .post-title, .one.blog6 .post-meta {
 	width: 850px;
 	float: right;
@@ -295,6 +296,10 @@ ul.share li.facebook iframe {
 /*--------------------------------------------------
 			COMMENTS
 ---------------------------------------------------*/
+.post-info div.comments a span.dsq-postid {
+  font-size: inherit;
+  line-height: inherit;
+}
 .comment-list {
 	overflow: hidden;
 	margin: 0;
@@ -449,63 +454,4 @@ ul.share li.facebook iframe {
 }
 .wp-pagenavi span.current {
 	color: #fff;
-}
-
-
-@media only screen and (min-width: 768px) and (max-width: 959px) {
-#inner-content { width: 490px; }
-#sidebar { width: 190px; }
-.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 390px; }
-.one.blog1 .post-content {width: 610px;}
-.one.blog3 .post-content {width: 432px;}
-.one.blog6 .post-content {width: 610px;}
-.blog3 .post-media { width: 150px; }
-.blog3 .post-content { width: 210px; }
-.comment .comment-wrap, .comment .comment-meta { width: 85.4%; }
-.comment .children .comment-wrap, .comment .children .comment-meta { width: 83%; }
-.comment .children .children .comment-wrap, .comment .children .children .comment-meta { width: 79.8%; }
-.comment .children .children .children .comment-wrap, .comment .children .children .children .comment-meta { width: 75%; }
-.comment .children .children .children .children .comment-wrap, .comment .children .children .children .children .comment-meta { width: 100%; }
-.comment .children .children .children  .children .children .comment-wrap, .comment .children .children .children .children .children .comment-meta { width: 100%; }
-}
-
-@media only screen and (min-width: 480px) and (max-width: 767px) {
-#inner-content, #sidebar { width: 420px; }
-#inner-content { border-bottom: 1px solid #eee; margin: 0 0 40px 0; padding: 0 0 40px 0; }
-.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 320px; } 
-.blog6 .post-content, .blog6 .post-title, .blog6 .post-meta { width: 320px; }
-.one.blog1 .post-content {width: 320px;}
-.one.blog3 .post-content {width: 420px;}
-.one.blog5 .post-title, .one.blog5 .post-meta, .one.blog5 .post-content {width: 320px;}
-.one.blog6 .post-title, .one.blog6 .post-meta,  .one.blog6 .post-content {width: 320px;}
-.comment .comment-wrap, .comment .comment-meta { width: 100%; }
-.comment .children .comment-wrap, .comment .children .comment-meta { width: 100%; }
-.comment .children .children .comment-wrap, .comment .children .children .comment-meta { width: 100%; }
-.comment .children .children .children .comment-wrap, .comment .children .children .children .comment-meta { width: 100%; }
-.comment .children .children .children .children .comment-wrap, .comment .children .children .children .children .comment-meta { width: 100%; }
-}
-
-@media only screen and (min-width: 320px) and (max-width: 479px) {
-#inner-content, #sidebar { width: 300px; }
-#inner-content { border-bottom: 1px solid #eee; margin: 0 0 40px 0; padding: 0 0 40px 0; }
-.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 300px; } 
-.blog6 .post-content, .blog6 .post-title, .blog6 .post-meta { width: 300px; }
-.one.blog1 .post-content {width: 300px;}
-.one.blog3 .post-content {width: 300px;}
-.one.blog5 .post-title, .one.blog5 .post-meta, .one.blog5 .post-content {width: 300px;}
-.one.blog6 .post-title, .one.blog6 .post-meta, .one.blog6 .post-content {width: 300px;}
-.comment .comment-wrap, .comment .comment-meta { width: 100%; }
-.comment .children .comment-wrap, .comment .children .comment-meta { width: 100%; }
-.comment .children .children .comment-wrap, .comment .children .children .comment-meta { width: 100%; }
-.comment .children .children .children .comment-wrap, .comment .children .children .children .comment-meta { width: 100%; }
-.comment .children .children .children .children .comment-wrap, .comment .children .children .children .children .comment-meta { width: 100%; }
-.blog5 .post-info { width: 100%; margin: -57px 0 0 0; }
-.post-info { width: 100%; margin: 0 0 20px 0; }
-.post-info div { width: auto; float: left; }
-.post-info div.date { padding: 8px; }
-.post-info div.date span { display: inline; margin: 0 2px; }
-.post-info div.date span.day, .post-info div.date span.month, .post-info div.comments a span { font-size: 11px; line-height: 11px; }
-.post-info div.comments { height: auto; }
-.post-info div.comments a { font-size: 11px; padding: 8px; }
-.post-info div.comments a span { display: inline; margin: 0 2px; }
 }

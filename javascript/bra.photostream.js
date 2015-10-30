@@ -1,3 +1,12 @@
+/*
+Flickr API key: http://www.flickr.com/services/apps/create/noncommercial/
+*/
+var flickr_api_key = "40877bb0e10edad168a2ccee1f176fb7";
+/*
+Instagam token: http://www.brankic1979.com/instagram/
+*/
+var instagram_token = "338517687.1912c81.b47c05c499c1401d90d7afcfc2bb7def";
+
 (function($){
     $.fn.extend({
         bra_photostream: function(options) {
@@ -5,7 +14,8 @@
             var defaults = {
                 user: 'brankic1979',
                 limit: 10,
-				social_network: 'dribbble'
+				social_network: 'dribbble',
+				api_token: ''
 				
             };
             
@@ -102,32 +112,67 @@
 						};
 					});	
 				  }
-				  if (o.social_network == "flickr") { 
+				  if (o.social_network == "flickr") {
+
+						if (o.api_token == "") o.api_token = flickr_api_key;
 						obj.append("<ul></ul>")
-						$.getJSON("http://api.flickr.com/services/rest/?method=flickr.people.findByUsername&username=" + o.user+ "&format=json&api_key=85145f20ba1864d8ff559a3971a0a033&jsoncallback=?", function(data){
+						$.getJSON("https://api.flickr.com/services/rest/?method=flickr.people.findByUsername&username=" + o.user + "&format=json&api_key=" + o.api_token + "&jsoncallback=?", function(data){
+						var flickr_status = data.stat; 
+						if (flickr_status == "ok") {  						
+								var nsid = data.user.nsid;
+								$.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&user_id=" + nsid + "&format=json&api_key=" + o.api_token + "&per_page=" + o.limit + "&page=1&extras=url_sq&jsoncallback=?", function(data){
+									$.each(data.photos.photo, function(i,img){
+										var img_owner = img.owner;
+										var img_title = img.title;
+										var img_src = img.url_sq;
+										var img_id = img.id;
+										var img_url = "http://www.flickr.com/photos/" + img_owner + "/" + img_id;
+										var image = $('<img/>').attr({src: img_src, alt: img_title});
+										var url = $('<a/>').attr({href: img_url, target: '_blank', title: img_title});
+										var url2 = $(url).append(image);
+										var li = $('<li/>').append(url2);
+										$("ul", obj).append(li);
+									})
+							   })
+						}
+						
+
+						if (flickr_status == "fail") {
+							$.getJSON("https://api.flickr.com/services/rest/?method=flickr.people.findByEmail&find_email=" + o.user+ "&format=json&api_key=" + o.api_token + "&jsoncallback=?", function(data){
 							var nsid = data.user.nsid;
-							$.getJSON("http://api.flickr.com/services/rest/?method=flickr.photos.search&user_id=" + nsid + "&format=json&api_key=85145f20ba1864d8ff559a3971a0a033&per_page=" + o.limit + "&page=1&extras=url_sq&jsoncallback=?", function(data){
-								$.each(data.photos.photo, function(i,img){
-									var img_owner = img.owner;
-									var img_title = img.title;
-									var img_src = img.url_sq;
-									var img_id = img.id;
-									var img_url = "http://www.flickr.com/photos/" + img_owner + "/" + img_id;
-									var image = $('<img/>').attr({src: img_src, alt: img_title});
-									var url = $('<a/>').attr({href: img_url, target: '_blank', title: img_title});
-									var url2 = $(url).append(image);
-									var li = $('<li/>').append(url2);
-									$("ul", obj).append(li);
-								})
-						   });
-					   });	
+								$.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&user_id=" + nsid + "&format=json&api_key=" + o.api_token + "&per_page=" + o.limit + "&page=1&extras=url_sq&jsoncallback=?", function(data){
+									$.each(data.photos.photo, function(i,img){
+										var img_owner = img.owner;
+										var img_title = img.title;
+										var img_src = img.url_sq;
+										var img_id = img.id;
+										var img_url = "http://www.flickr.com/photos/" + img_owner + "/" + img_id;
+										var image = $('<img/>').attr({src: img_src, alt: img_title});
+										var url = $('<a/>').attr({href: img_url, target: '_blank', title: img_title});
+										var url2 = $(url).append(image);
+										var li = $('<li/>').append(url2);
+										$("ul", obj).append(li);
+									})
+							   })
+							})	
+							
+						}
+						
+								;
+						
+						
+						});
+						 	
+
+
+					   	
 
 				  }
 				  
-				  if (o.social_network == "instagram") { 
-						obj.append("<ul></ul>")
-						var token = "188312888.f79f8a6.1b920e7f642b4693a4cb346162bf7154";						
-						url =  "https://api.instagram.com/v1/users/search?q=" + o.user + "&access_token=" + token + "&count=10&callback=?";
+				  if (o.social_network == "instagram") {
+					    if (o.api_token == "") o.api_token = instagram_token; 
+						obj.append("<ul></ul>")						
+						url =  "https://api.instagram.com/v1/users/search?q=" + o.user + "&access_token=" + o.api_token + "&count=10&callback=?";
 						$.getJSON(url, function(data){
 							$.each(data.data, function(i,shot){
 								  var instagram_username = shot.username;
@@ -137,7 +182,7 @@
 									  var user_id = shot.id;
 
 									if (user_id != ""){	
-										url =  "https://api.instagram.com/v1/users/" + user_id + "/media/recent/?access_token=" + token + "&count=" + o.limit + "&callback=?";
+										url =  "https://api.instagram.com/v1/users/" + user_id + "/media/recent/?access_token=" + o.api_token + "&count=" + o.limit + "&callback=?";
 										$.getJSON(url, function(data){
 
 											$.each(data.data, function(i,shot){
@@ -174,7 +219,9 @@
         }
     });
 })(jQuery);
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 (function($){
     $.fn.extend({
         bra_photostream_large: function(options) {
@@ -184,7 +231,8 @@
                 limit: 12,
 				social_network: 'dribbble',
 				columns: 4, // 4, 3, 2 columns
-				shape: 'none'
+				shape: 'none',
+				api_token: ''
 				
             };
             
@@ -276,6 +324,7 @@
 							});
 							
 							html += "</ul></div>";
+							
 							obj.append(html);
 							obj.removeClass("photostream");
 							$("li img", obj).each(function(){
@@ -314,7 +363,8 @@
 						};
 					});	
 				  }
-				  if (o.social_network == "flickr") { 
+				  if (o.social_network == "flickr") {
+					    if (o.api_token == "") o.api_token = flickr_api_key;  
 						html = "";
 					    if (o.shape == "none") {
 							html += '<div class="portfolio-grid"><ul id="thumbs">'
@@ -322,10 +372,54 @@
 							html += '<div class="portfolio-grid"><ul id="thumbs" class="shaped ' + o.shape + '">'
 						}
 						
-						$.getJSON("http://api.flickr.com/services/rest/?method=flickr.people.findByUsername&username=" + o.user+ "&format=json&api_key=85145f20ba1864d8ff559a3971a0a033&jsoncallback=?", function(data){
+						
+						$.getJSON("https://api.flickr.com/services/rest/?method=flickr.people.findByUsername&username=" + o.user + "&format=json&api_key=" + o.api_token + "&jsoncallback=?", function(data){
+						var flickr_status = data.stat; 
+						if (flickr_status == "ok") {  						
+								var nsid = data.user.nsid;
+								$.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&user_id=" + nsid + "&format=json&api_key=" + o.api_token + "&per_page=" + o.limit + "&page=1&extras=url_z,url_o,url_m&jsoncallback=?", function(data){
+									$.each(data.photos.photo, function(i,img){
+									var img_owner = img.owner;
+									var img_title = img.title;
+									var img_src = img.url_z;
+									var img_src_o = img.url_o;
+									var img_src_m = img.url_m;
+									
+									if (img_src_o == undefined) img_src_o = img_src_m;
+									var img_id = img.id;
+									var img_url = "http://www.flickr.com/photos/" + img_owner + "/" + img_id;
+									if (img_src == undefined) img_src = img_src_o;
+									//if (img_src == undefined) img_src = img_src_b;
+									if (o.shape == "none") {
+										html += '<li class="item col' + o.columns + '">';
+									} else {
+										html += '<li class="item">';
+									}
+									//alert(img_title)
+									
+									if (o.shape == "none") {
+									html += "<img width='100%' src='" + img_src + "' alt=''><div class='item-info col" + o.columns + "'><h3 class='title'><a target='_blank' href='" + img_url + "' title='" + img_title + "'>"+ img_title + "</a></h3></div>";
+									html += '<div class="item-info-overlay"><div><a href="' + img_url + '" class="view">details</a><a title="' + img_title + '" href="' + img_src_o + '" class="preview" data-rel="prettyPhoto[]">preview</a></div>	</div><!--END ITEM-INFO-OVERLAY-->';
+									} else {
+									html +=  "<div class='item-container'><img src='" + img_src + "' alt='' style='height:auto'></div>";
+									html += '<div class="item-info-overlay"><div><h3 class="title"><a target="_blank" href="' + img_url + '" title="' + img_title + '">'+ img_title + '</a></h3><a href="' + img_url + '" class="view">details</a><a title="' + img_title + '" href="' + img_src_o + '" class="preview" data-rel="prettyPhoto[]">preview</a></div>	</div><!--END ITEM-INFO-OVERLAY-->';												
+									}
+									html += "</li>";
+									//alert(html)
+								})
+								html += "</ul></div>";
+								obj.append(html);
+								obj.removeClass("photostream");
+							   })
+							   
+						}
+						
+
+						if (flickr_status == "fail") {
+							$.getJSON("https://api.flickr.com/services/rest/?method=flickr.people.findByEmail&find_email=" + o.user+ "&format=json&api_key=" + o.api_token + "&jsoncallback=?", function(data){
 							var nsid = data.user.nsid;
-							$.getJSON("http://api.flickr.com/services/rest/?method=flickr.photos.search&user_id=" + nsid + "&format=json&api_key=85145f20ba1864d8ff559a3971a0a033&per_page=" + o.limit + "&page=1&extras=url_o,url_z,url_m&jsoncallback=?", function(data){
-								$.each(data.photos.photo, function(i,img){
+								$.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&user_id=" + nsid + "&format=json&api_key=" + o.api_token + "&per_page=" + o.limit + "&page=1&extras=url_z,url_o,url_m&jsoncallback=?", function(data){
+									$.each(data.photos.photo, function(i,img){
 									var img_owner = img.owner;
 									var img_title = img.title;
 									var img_src = img.url_z;
@@ -351,25 +445,33 @@
 									}
 									html += "</li>";
 								})
-								
-								html += "</ul></div>";
 								obj.append(html);
 								obj.removeClass("photostream");
-						   });
-					   });	
+							   })
+							})	
+							
+						};
+						
+						//obj.append(html);
+
+						
+						
+						});						
+						
+	
 
 				  }
 				  
 				  if (o.social_network == "instagram") { 
+				        if (o.api_token == "") o.api_token = instagram_token; 
 						html = "";
 					    if (o.shape == "none") {
 							html += '<div class="portfolio-grid"><ul id="thumbs">'
 						} else {
 							html += '<div class="portfolio-grid"><ul id="thumbs" class="shaped ' + o.shape + '">'
 						}
-						
-						var token = "188312888.f79f8a6.1b920e7f642b4693a4cb346162bf7154";						
-						url =  "https://api.instagram.com/v1/users/search?q=" + o.user + "&access_token=" + token + "&count=10&callback=?";
+											
+						url =  "https://api.instagram.com/v1/users/search?q=" + o.user + "&access_token=" + o.api_token + "&count=10&callback=?";
 						$.getJSON(url, function(data){
 							$.each(data.data, function(i,shot){
 								  var instagram_username = shot.username;
@@ -379,7 +481,7 @@
 									  var user_id = shot.id;
 
 									if (user_id != ""){	
-										url =  "https://api.instagram.com/v1/users/" + user_id + "/media/recent/?access_token=" + token + "&count=" + o.limit + "&callback=?";
+										url =  "https://api.instagram.com/v1/users/" + user_id + "/media/recent/?access_token=" + o.api_token + "&count=" + o.limit + "&callback=?";
 										$.getJSON(url, function(data){
 
 											$.each(data.data, function(i,shot){
