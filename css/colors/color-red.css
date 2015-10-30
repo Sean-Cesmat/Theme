@@ -1,0 +1,84 @@
+input.submit, input.submit:focus, input.submit:active {
+	background: #ca0000;
+}
+a { 
+	color: #ca0000;
+}
+#primary-menu .current {
+	background-color: #ca0000 !important;
+}
+.fixed #primary-menu .current {	background-color: #ca0000 !important; }
+#footer a:hover {
+	color: #ca0000;
+}
+.tweets a:hover , #footer .tweets a:hover, .tweets .tweet_time a:hover, #footer .tweets .tweet_time a:hover {
+	color: #ca0000;
+}
+.photostream a:hover, #footer .photostream a:hover {
+	background-color: #ca0000;
+	border: 1px solid #ca0000;
+}	
+.team-member-info .social-personal li a:hover {
+	background-color: #ca0000;
+}
+.skills-graph li span {
+	background-color: #ca0000;
+}
+.services div:hover, .services div:hover a {
+	background-color:#ca0000; 
+}
+.grey:hover { background-color:#ca0000; }
+.highlight1 {
+	background-color: #ca0000;
+}
+.item-info-overlay {
+	background-color: #ca0000;
+}
+.hexagon .item-info-overlay {
+    background-color: #ca0000;
+}
+.circle .item-info-overlay {
+    background-color: #ca0000;
+}
+.triangle .item-info-overlay {
+    background-color: #ca0000;
+}
+ul.item-nav li:hover {
+	background-color: #ca0000;
+}
+.contact-success {
+	background-color: #ca0000;
+}
+.form .contact-error {
+    color: #ca0000;
+}
+
+.flex-direction-nav li a:hover { background-color: #ca0000; }
+
+.widget a:hover {
+	color: #ca0000;
+}
+.widget ul#recentcomments a.author:hover {
+	color: #ca0000;
+}
+.post-title h2.title a:hover {
+	color: #ca0000;
+}
+.post-meta a:hover {
+	color: #ca0000;
+}
+.post-info div.date {
+	background-color: #ca0000;
+}
+.comment .author a:hover {
+	color: #ca0000;
+}
+.comment .comment-meta .reply:hover {
+	background-color:#ca0000; 
+}
+.wp-pagenavi span.current {
+	background-color: #ca0000;
+}
+.tagcloud a:hover {
+	background-color: #ca0000;
+}

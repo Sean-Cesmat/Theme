@@ -1,0 +1,105 @@
+/*
+
+Theme Name: BigBang
+Theme URI: http://demo.brankic.net/bigbangwp
+Description: For all updates, please follow us on <a href='https://twitter.com/brankic1979'>Twitter (Brankic1979)</a>
+Author: Brankic1979
+Author URI: http://brankic1979.com/
+License: GNU General Public License
+License URI: license.txt
+Version: 1.7.3	
+
+*/
+
+/*
+CSS changes can be made in files in the /css/ folder. This is a placeholder file required by WordPress, so do not delete it.
+
+
+Changelog
+
+1.7.3   Portfolio slider pop-up fix (slider.inc.php)
+1.7.2   Fix for portfolio slider on iPad (portrait) (css/blog.css)
+		Minor fix in portfolio shortcode (if there is no title attribute, no title will be use) (includes/bra_shortcodes.php)
+		Portfolio slider pop-up image if there is no URL provided (slider.inc.php)
+		Contact form drop down style fixed (css/style.css)
+		Fixed issue on some servers (bra_create_portfolio_select.php)
+1.7.1   1/2 + 1/2 shortcode fix (includes/bra_shortcodes.js)
+		FB Like button fix for posts (share.inc.php)
+		New XML file
+1.7     New shortcode engine (should work on all servers) (includes/bra_shortcode_*.php, includes/bra_shortcodes.js)
+		New parameter for centered title shortcode - top margin (includes/bra_shortcodes.php)
+		Spacing issues on blog and category pages (index.php, page-blog-1-6.php, single.php)
+		Photostream pages fix if there is no title, or title is too long (custom.js)
+		Heading fix (css/style.css)
+		Blog single images with prettyPhoto pop-up (single.php)
+		New option - Hide number of comments if there are no comments (index.php, page-blog-1-6.php, single.php, includes/bra_admin_3.php)
+		XSS safety search fix (index.php)
+		XSS contact form fix (includes/ajax.recaptcha.php)
+		XSS minor fix (footer.php, header.php)
+		Blog titles hover bug (css/blog.css)
+		Blockquote paragraph fix (css/style.css)
+		Shortcodes fix for empty paragraphs (includes/bra_theme_functions.php, includes/bra_shortcodes.php)
+		No title gap fix (page*.php)
+		Facebook share pop-up z-index fix (css/blog.css)
+1.6     Shadow issue on fixed menu in stretched version (css/style-stretched.css)
+		Removing image from blog pages if there is no featured image defined (javascript/custom.js)
+		Fix for images with height attribute in blog posts (javascript/custom.js)
+		Better solution for email from field in contact form (includes/bra_admin_3.php, includes/ajax.recaptcha.php)
+		Slider width fix for pages with sidebar (css/flexslider.css)
+		Fix for number of comments on blog pages (index.php, page-blog-1-6.php)
+		Blog pages fix for sidebar (page-blog-1-6.php, slider.inc.php, slider.inc.3.php, javascript/jquery.flexslider.js)
+		Portfolio thumb fix for extra large images (includes/bra_shortcodes.php)
+		CSS fix for contact full width map on small devices (css/style.css)
+		Portfolio single navigation only through same category (includes/ambrosite-post-link-plus.php, functions.php)
+1.5.2   Minor fix in page.php
+		Bad code in javascript/jquery.isotope.min.js
+		Full width contact page fix for pop up title (page-contact-2.php)
+		Fix for fixed height in portfolio shortcode (javascript/jquery.isotope.min.js)
+1.5.1   Pop-up video auto start is changed to false (javascript/prettyPhoto.js)
+		Featured image and slider can be shown on blog pages (page-blog-1-6.php)
+		Hide featured image is working on single posts (single.php)
+		Fix for full width blog pages (css/blog.css)
+1.5     Blog single and blog page full width layout (single.php, page-blog-1-6.php, includes/bra_admin_2.php, css/blog.css)
+		Portfolio layout with fixed height (includes/bra_shortcodes.php, includes/shortcodes_portfolio.php, includes/bra_shortcodes_options.js, javascript/jquery.isotope.min.js)
+		Some transaltion issues (includes/bra_pagenavi.php, single.php, page-blog-1-6.php, footer.php languages/en_EN.po/mo)
+		Full width contact map fix for iPhone (css/style.css)
+		Cients grid URLs are oppened in prettyPhoto pop-up. (javascript/custom.js)
+1.4     Fix for Circle and Hexagon shape elements (includes/bra_shortcodes.php)
+		If title is hidden, divider is added (page.php, page-contact.php, page-blog-1-6.php)
+		Portfolio shortcode fix for deleted categories (includes/bra_shortcodes.php)
+		Pagination fix for blog pages (page-blog-1-6.php)
+		Large Flickr photostream fix for some users (javascript/bra.photostream.js)
+		Typo in Brankic Custom Fields (includes/bra_custom_fields.php)
+		Disable hover option for portfolio layout (includes/shortcodes_portfolio.php, includes/bra_shortcodes.php, includes/bra_shortcodes_options.js)
+1.3     Portfolio shortcode can use Blog categories now(not only Portfolio ones) (includes/shortcodes_portfolio.php, includes/bra_shortcodes.php)
+		Blog posts with video will show video on featured image place (single.php, page-blog-1.php, page-blog-2.php, page-blog-3.php, page-blog-4.php, page-blog-5.php, page-blog-6.php)
+		Extra images fix for portfolio items and posts (includes/bra_custom_fields.php)
+1.2     Show/hide pinned menu on scroll option added to Brankic Panel (includes/bra_admin_1.php, includes/bra_theme_functions.php)
+		Additional HTML option for portfolio single posts (includes/bra_custom_fields.php, single-portfolio_item.php)
+		Added comments on single portfolio posts (single-portfolio_item.php)
+		Extra CSS moved to the end of page source (header.php and footer.php)
+1.1.3   Grid layout fix for Chrome (javascript/custom.js)
+1.1.2   Fix for 1.1.1 (Grid layout fix if images aren't proportional (javascript/custom.js))
+1.1.1   Local bg image fix (footer.php)
+		Grid layout fix if images aren't proportional (custom.js)
+1.1.    Added updates to Dashboard (includes/twitter.js, includes/bra_admin_functions.php)
+		Removed subtitle custom field for single posts (includes/bra_custom_fields.php)
+		z-index fix for shortcode pop-up window (includes/bra_admin_style.css)
+		Fix for not closed tags in portfolio excerpts (includes/bra_theme_functions.php)
+		Option for defining number of Extra images (includes/bra_admin_1.php, slider.inc.php, function.php, includes/bra_custom_fields.php, includes/bra_theme_functions.php)
+		Twin slides option for portfolio items (slider.inc.php, includes/bra_custom_fields.php )
+		Home page link in pinned menu fixed (javascript/header.js))
+		Fix for iPhone resolution boxed version layout (css/style.css)
+1.0.7.  iPhone portrait orientation layout fix (css/style.css), 
+		Portfolio bug on touch devices (javascript/custom.js)
+1.0.6.  Some minor changes in help file and photostream plugin.
+1.0.5.  2nd submenu fix (css/style.css), 
+		shortcode button popup z-index fix (includes/bra_admin_style.css), 
+		default_translation file added and fixed translation issues (functions.php, includes/bra_theme_functions.php, single-portfolio_item.php, page-contact.php, page-contact-2.php), 
+		if Latest posts is seleted for home page title is added (index.php)
+1.0.4.  Fixed pinned menu (javascript/header.php)
+1.0.3.  Added links in help file
+1.0.1. & 1.0.2. ThemeForest approval issues
+
+
+*/
