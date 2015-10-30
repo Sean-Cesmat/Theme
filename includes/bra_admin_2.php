@@ -11,7 +11,7 @@ function mytheme_add_admin2()
 {
 global $parent_slug_2, $page_title_2, $menu_title_2, $capability_2, $menu_slug_2, $function_2;
 $hook = add_submenu_page( $parent_slug_2, $page_title_2, $menu_title_2, $capability_2, $menu_slug_2, $function_2);
-add_action('admin_print_scripts-' . $hook, 'my_admin_scripts');
+add_action('admin_enqueue_scripts-' . $hook, 'my_admin_scripts');
 }
 
 add_action('admin_menu', "mytheme_add_admin2");

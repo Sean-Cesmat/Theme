@@ -20,6 +20,12 @@ if (get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."hide_title", true) != "yes")
     
 <?php
 }
+else
+{
+?>
+<div style="height:20px;"></div>	
+<?php
+}
 ?>  
 
 <?php
@@ -49,7 +55,7 @@ else
 if ($featured_image != "" && $hide_featured_image != "yes")
 {
 ?> 
-<p><img src="<?php echo $featured_image; ?>" alt=""></p>
+<p><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ?>"></p>
 <?php
 }
 if (extra_images_exists()) include ("slider.inc.php");
@@ -58,18 +64,6 @@ the_content();
 ?>
     </div><!--END ONE-->
 <?php
-if (get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."add_class_title", true) != "no")
-{
-?>
-<script type='text/javascript'>
-jQuery(document).ready(function($){
-    $(".one :header, #inner-content :header").addClass("title");
-    $(".team-member-info :header, .no_title").removeClass("title");
-})    
-    
-</script>
-<?php
-} 
 
 if ($sidebar) get_sidebar(); 
 

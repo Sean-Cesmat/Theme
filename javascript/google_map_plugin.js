@@ -31,8 +31,9 @@
 						center: latlng,
 						mapTypeId: google.maps.MapTypeId.ROADMAP,
 						zoomControl: true,
+						scrollwheel: false,
 						zoomControlOptions: {
-						  style: google.maps.ZoomControlStyle.DEFAULT
+						  style: google.maps.ZoomControlStyle.LARGE
 					  },
 						scaleControl: true
 					  }

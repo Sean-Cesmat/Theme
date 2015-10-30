@@ -5,18 +5,19 @@ global $var_prefix, $root;
 $page_title = BRANKIC_THEME." Global Options";
 $menu_title = "Brankic Panel";
 $capability = "manage_options";
-$menu_slug = "brankic_admin_1";
-$function = "mytheme_admin";
+$menu_slug = "themes.php?page=options-framework";
+$function = "";
 $icon_url =  BRANKIC_ROOT.'/bra_favicon.ico';
 $position = "61";
 
-   
+// http://localhost/WordPressSabloni/Bigbang/WordPress/wp-admin/admin.php?page=brankic_admin_1
+// http://localhost/WordPressSabloni/Bigbang/WordPress/wp-admin/themes.php?page=options-framework   
 
 function mytheme_add_admin() 
 {
     global $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position; 
     $hook = add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-    add_action('admin_print_scripts-' . $hook, 'my_admin_scripts');
+    add_action('admin_enqueue_scripts-' . $hook, 'my_admin_scripts');
 }
 add_action('admin_menu', 'mytheme_add_admin');
 
@@ -104,10 +105,16 @@ if ($_POST["submit"] == "Save Changes")
 
 <?php bra_form_textarea(BRANKIC_VAR_PREFIX."ga", "Google Analytics tracking code", 500, 4, "", "Insert your Google Analytics tracking code (whole code)", ""); ?>
 
-<?php bra_form_text(BRANKIC_VAR_PREFIX."extra_images_no", "Number of Extra images (used for slides)", 60, "20", "", ""); ?> 
+<?php bra_form_text(BRANKIC_VAR_PREFIX."extra_images_no", "Number of Extra images (used for slides)", 60, "5", "", ""); ?> 
+
+<?php bra_form_select(BRANKIC_VAR_PREFIX."disable_responsive", "Disable responsive layout", array("no" => "No", 
+                                                                "yes" => "Yes"), "", "If you disable responsive layout website layout won't adjust to screen size of viewers device", ""); ?>
 
 <?php bra_form_select(BRANKIC_VAR_PREFIX."show_panel", "Show Panel", array("no" => "No", 
                                                                 "yes" => "Yes"), "", "Show panel with style options (like on our live preview)", ""); ?>
+                                                                
+<?php bra_form_select(BRANKIC_VAR_PREFIX."short_pages_fix", "Short pages fix", array("no" => "No", 
+                                                                "yes" => "Yes"), "", "If there's not much content on the page footer will be fixed to the bottom of the page (beta version)", ""); ?>                                                                
 
 </tbody>
 </table>

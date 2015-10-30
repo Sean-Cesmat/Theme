@@ -1,8 +1,8 @@
 <?php get_header(); ?>
 <?php
 $paged = (get_query_var("paged")) ? get_query_var("paged") : 1;
-$category_page_style = get_option(BRANKIC_VAR_PREFIX."category_page_style"); 
-$category_page_style_fullwidth = get_option(BRANKIC_VAR_PREFIX."category_page_style_fullwidth");
+$category_page_style = of_get_option(BRANKIC_VAR_PREFIX."category_page_style"); 
+$category_page_style_fullwidth = of_get_option(BRANKIC_VAR_PREFIX."category_page_style_fullwidth");
 
 if ($category_page_style == "") $category_page_style = "1"; 
 if ($category_page_style_fullwidth == "") $category_page_style_fullwidth = "no"; 
@@ -69,7 +69,7 @@ else
 ?>
     
 <?php if(have_posts()) : while ( have_posts() ) : the_post(); 
-$hide_no_of_comments = get_option(BRANKIC_VAR_PREFIX."hide_no_of_comments");
+$hide_no_of_comments = of_get_option(BRANKIC_VAR_PREFIX."hide_no_of_comments");
 if ($hide_no_of_comments == "yes" && get_comments_number() == 0) $hide_no_of_comments = "yes"; else $hide_no_of_comments = "no";
 $featured_image_array = wp_get_attachment_image_src( get_post_thumbnail_id(), 'single-post-thumbnail' );
 if ($category_page_style == 3) $featured_image_array = wp_get_attachment_image_src( get_post_thumbnail_id(), 'blog-square' ); 
@@ -123,7 +123,7 @@ if ($category_page_style == "1")
                         if ($category_page_style_fullwidth == "yes") $img_width = 850; else $img_width = 600;
                     ?>
                         <?php if (extra_images_exists()) { include ("slider.inc.php"); } else { ?>         
-                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="" width="<?php echo $img_width; ?>" /></a>
+                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ; ?>" width="<?php echo $img_width; ?>" /></a>
                         <?php } ?>
                     <?php
                     }
@@ -136,9 +136,9 @@ if ($category_page_style == "1")
                 
                     <div class="post-meta">                
                         <ul>
-                            <li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?> <li> <span> <?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?> </li><?php } ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?> <li> <span> <?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?> </li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_authors_blog_page") == "yes") { ?><li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?> <li> <span> <?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?> </li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?> <li> <span> <?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?> </li><?php } ?>
                         </ul>
                     </div><!--END POST-META-->
 <?php
@@ -166,9 +166,9 @@ if ($category_page_style == "2")
                     
                     <div class="post-meta">                
                         <ul>
-                            <li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_authors_blog_page") == "yes") { ?><li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
                         </ul>
                     </div><!--END POST-META-->  
             
@@ -204,7 +204,7 @@ if ($category_page_style == "2")
                         if ($category_page_style_fullwidth == "yes") $img_width = 850; else $img_width = 600;
                     ?>
                         <?php if (extra_images_exists()) { include ("slider.inc.php"); } else { ?>        
-                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="" width="<?php echo $img_width; ?>" /></a>
+                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ; ?>" width="<?php echo $img_width; ?>" /></a>
                         <?php } ?>
                     <?php } ?> 
                     </div><!--END POST-MEDIA-->
@@ -256,7 +256,7 @@ if ($category_page_style == "3")
                     {
                     ?>
                         <?php if (extra_images_exists()) { include ("slider.inc.3.php"); } else { ?>         
-                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="" width="270" height"270" /></a>
+                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ; ?>" width="270" height"270" /></a>
                         <?php } ?>
                     <?php } ?> 
                 </div><!--END POST-MEDIA-->
@@ -269,9 +269,9 @@ if ($category_page_style == "3")
                 
                     <div class="post-meta">                
                         <ul>
-                            <li> <span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_authors_blog_page") == "yes") { ?><li> <span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
                         </ul>
                     </div><!--END POST-META--> 
 <?php
@@ -316,7 +316,7 @@ if ($category_page_style == "4")
                         if ($category_page_style_fullwidth == "yes") $img_width = 950; else $img_width = 700;
                     ?>
                         <?php if (extra_images_exists()) { include ("slider.inc.php"); } else { ?>         
-                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="" width="<?php echo $img_width; ?>" /></a>
+                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ; ?>" width="<?php echo $img_width; ?>" /></a>
                         <?php } ?>
                     <?php } ?> 
                 </div><!--END POST-MEDIA-->
@@ -336,9 +336,9 @@ if ($category_page_style == "4")
                 
                     <div class="post-meta">                
                         <ul>
-                            <li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_authors_blog_page") == "yes") { ?><li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
                         </ul>
                     </div><!--END POST-META-->
 <?php
@@ -357,9 +357,9 @@ if ($category_page_style == "5")
                 
                 <div class="post-meta">                
                     <ul>
-                        <li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_authors_blog_page") == "yes") { ?><li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
                     </ul>
                 </div><!--END POST-META-->
                 
@@ -395,7 +395,7 @@ if ($category_page_style == "5")
                         if ($category_page_style_fullwidth != "yes") $img_width = 950; else $img_width = 700;
                     ?>
                         <?php if (extra_images_exists()) { include ("slider.inc.php"); } else { ?>         
-                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="" width="<?php echo $img_width; ?>" /></a>
+                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ; ?>" width="<?php echo $img_width; ?>" /></a>
                         <?php } ?>
                     <?php } ?> 
                 </div><!--END POST-MEDIA-->
@@ -424,9 +424,9 @@ if ($category_page_style == "6")
                 
                 <div class="post-meta">                
                     <ul>
-                        <li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
-<?php if (get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_authors_blog_page") == "yes") { ?><li><span><?php _e('Posted by', BRANKIC_THEME_SHORT); ?></span> <?php the_author_link(); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_cats_blog_page") == "yes") { ?><li> <span><?php _e('in', BRANKIC_THEME_SHORT); ?></span> <?php the_category(', '); ?></li><?php } ?>
+<?php if (of_get_option(BRANKIC_VAR_PREFIX."show_tags_blog_page") == "yes") { ?><li> <span><?php _e(' Tagged with', BRANKIC_THEME_SHORT); ?></span> <?php the_tags('', ', ', ''); ?></li><?php } ?>
                     </ul>
                 </div><!--END POST-META--> 
                 
@@ -446,11 +446,11 @@ if ($category_page_style == "6")
                         {
                             if (bra_is_vimeo($video_link))
                             {
-                                $video_link = "https://player.vimeo.com/video/" . bra_get_vimeo_id($video_link);
+                                $video_link = "http://player.vimeo.com/video/" . bra_get_vimeo_id($video_link);
                             }
                             if (bra_is_youtube($video_link))
                             {
-                                $video_link = "https://www.youtube.com/embed/" . bra_get_youtube_id($video_link);
+                                $video_link = "http://www.youtube.com/embed/" . bra_get_youtube_id($video_link);
                             }
                             ?>
                             <iframe src="<?php echo $video_link; ?>" width="100%" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
@@ -462,7 +462,7 @@ if ($category_page_style == "6")
                         if ($category_page_style_fullwidth == "yes") $img_width = 950; else $img_width = 700;
                     ?>
                         <?php if (extra_images_exists()) { include ("slider.inc.php"); } else { ?>         
-                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="" width="<?php echo $img_width; ?>" /></a>
+                        <a href="<?php the_permalink(); ?>"><img src="<?php echo $featured_image; ?>" alt="<?php the_title(); ; ?>" width="<?php echo $img_width; ?>" /></a>
                         <?php } ?>
                     <?php } ?> 
                 </div><!--END POST-MEDIA-->
@@ -488,9 +488,7 @@ the_excerpt();
 ?>
 <p><a href="<?php the_permalink(); ?>" class="more-link"><?php _e('Continue reading &rarr;', BRANKIC_THEME_SHORT); ?></a></p>
                 </div><!--END POST-CONTENT -->
-  
-  <?php if(function_exists('selfserv_shareaholic')) { selfserv_shareaholic(); } ?>
-
+                
             </div><!--END POST-->
 
 

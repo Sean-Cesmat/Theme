@@ -7,6 +7,9 @@ function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
+
+
+
 /*--------------------------------------------------
 		  DROPDOWN MENU
 ---------------------------------------------------*/
@@ -37,57 +40,8 @@ function is_touch_device() {
 	}); 
 
 
-/***************************************************
-	    PORTFOLIO ITEM IMAGE HOVER
-***************************************************/
-jQuery(window).load(function(){
-						   
-	jQuery(".portfolio-grid ul li .item-info-overlay").hide();
-	
-	if( is_touch_device() ){
-		jQuery(".portfolio-grid ul li").click(function(){
-												  
-			var count_before = jQuery(this).closest("li").prevAll("li").length;
-			
-			var this_opacity = jQuery(this).find(".item-info-overlay").css("opacity");
-			var this_display = jQuery(this).find(".item-info-overlay").css("display");
-			
-			
-			if ((this_opacity == 0) || (this_display == "none")) {
-				jQuery(this).find(".item-info-overlay").fadeTo(250, 1);
-			} else {
-				jQuery(this).find(".item-info-overlay").fadeTo(250, 0);
-			}
-			
-			jQuery(this).closest("ul").find("li:lt(" + count_before + ") .item-info-overlay").fadeTo(250, 0);
-			jQuery(this).closest("ul").find("li:gt(" + count_before + ") .item-info-overlay").fadeTo(250, 0);	
 
-		});	
 
-	}
-	else{	
-			jQuery(".portfolio-grid ul li").hover(function(){
-				jQuery(this).find(".item-info-overlay").fadeTo(250, 1);
-				}, function() {
-					jQuery(this).find(".item-info-overlay").fadeTo(250, 0);		
-			});
-		
-		}
-
-	
-	
-	
-});
-
-/***************************************************
-	  DUPLICATE H3 & H4 IN PORTFOLIO
-***************************************************/
-jQuery(window).load(function(){
-						  
-	jQuery(".item-info").each(function(i){
-		jQuery(this).next().prepend(jQuery(this).html())
-	});
-});
 
 /***************************************************
 	     TOGGLE STYLE
@@ -219,13 +173,17 @@ jQuery(document).ready(function($) {
 			var this_href = $(this).attr('href');
 			var this_target = $(this).attr('target');
 			if (this_target == undefined) this_target = '';
-			$(this).parents(".grid.clients").append('<li><a rel="prettyPhoto[]" href="' + this_href + '" target="' + this_target + '">' + $(this).html() + '</a></li>');
+			var this_class = $(this).attr('class');
+			if (this_class == "no_lightbox"){
+				$(this).parents(".grid.clients").append('<li><a href="' + this_href + '" target="' + this_target + '">' + $(this).html() + '</a></li>');
+			} else {
+				$(this).parents(".grid.clients").append('<li><a rel="prettyPhoto[]" href="' + this_href + '" target="' + this_target + '">' + $(this).html() + '</a></li>'); }
 		})
 		$(this).find('li:first').remove();
-		$(this).find('img').removeAttr("height");
+		//$(this).find('img').removeAttr("height");
 		
 		  // additional code if images aren't with same dimensions
-		  var li_max = 0;	
+/*		  var li_max = 0;	
 		  $(this).find("li").each(function(){
 			  var li_h = $(this).height();
 			  if (li_h > li_max) li_max = li_h;							 
@@ -243,7 +201,9 @@ jQuery(document).ready(function($) {
 				  var top_margin = parseInt((li_h - img_h) / 2)
 				  $(this).find("img").css("margin-top", top_margin + "px")
 			  }
-		  })
+		  })*/
+		  // end of additional code
+		 
 	})
 	
 	$('.grid').bra_last_last_row();
@@ -278,13 +238,6 @@ jQuery(document).ready(function($){
 })
 
 
-/***************************************************
-	  ADD MASK LAYER
-***************************************************/
-jQuery(window).load(function(){						
-	var $item_mask = jQuery("<div />", {"class": "item-mask"});
-	jQuery("ul.shaped .item-container, ul.comment-list .avatar").append($item_mask)
-})
 
 /***************************************************
 	  WORDPRESS RELATED
@@ -305,26 +258,31 @@ jQuery(document).ready(function($){
 	$("ul li.current-menu-item a.current").parent("li").addClass("current");
 	
 	// icon boxes fix for 3 icons
-	var icon_boxes_4_h2 = $("ul.grid.row4.services li:nth-child(4) h2").html();
-	var icon_boxes_4_p = $("ul.grid.row4.services li:nth-child(4) p:last-child").html();
-	if (icon_boxes_4_h2 == "" && icon_boxes_4_p == ""){
-		$("ul.grid.row4.services").removeClass("row4").addClass("row3");
+/*		$("ul.grid.row4.services").removeClass("row4").addClass("row3");
 		$("ul.grid.row3.services li:last").remove();
-		$("ul.grid.row3.services li:last").addClass("last");
-	}
+		$("ul.grid.row3.services li:last").addClass("last");*/
+		
+	// icon boxes fix for 5 icons
+/*		$("ul.grid.row4.services").removeClass("row4").addClass("row5");
+		$("ul.grid.row5.services li:last").remove();
+		$("ul.grid.row5.services li:last").addClass("last");*/
+
 
 	$("ul#portfolio-nav span:last").remove();
 	
-	var cols = 3;
+	var cols_temp = 0;
 	var i = 0;
 	$(".team").each(function(){
 		i++;
 		$(this).find(".social-personal span:last").remove();
+		
 		if ($(this).hasClass("one-fourth")) cols = 4;
 		if ($(this).hasClass("one-third")) cols = 3;
 		if ($(this).hasClass("one-half")) cols = 2;
-		remainder = i % cols
+		if (cols_temp != cols) i = 1;
+		//remainder = i % cols
 		if (i % cols == 0) $(this).addClass("last");
+		cols_temp = cols;
 	})
 })
 jQuery(document).ready(function($){
@@ -338,10 +296,28 @@ jQuery(document).ready(function($){
 jQuery(document).ready(function($) {
 //removing image if there is empty SRC
 $("img").each(function(){
-if ($(this).attr("src") == "") $(this).parent("a").parent(".post-media").remove();
+if ($(this).attr("src") == "") {
+	$(this).parents(".post-media").remove();
+}
 })
-//remove height attribute from blog images
-$(".post-content img").removeAttr("height");
+
+$(".blog5 .post").each(function(){
+if ($(this).find(".post-media").length == 0) {
+	$(this).find(".post-info").css("margin-top", "0px");
+}
+if ($(this).find(".post-media iframe").length > 0) {
+	$(this).find(".post-media iframe").parent(".post-media").css("float", "none");
+}
+
+})
+
+//remove .post-media if there is no featured image (or video)
+if ($(".post-media img").size() == 0 && $(".post-media iframe").size() == 0) {
+	$(".post-media").remove()
+}
+
+//remove height attribute from images on single posts
+$(".single-post .content-wrapper img").removeAttr("height");
 });
 
 /***************************************************
@@ -358,42 +334,6 @@ jQuery(document).ready(function($){
 	});
 });
 
-// since you can define height of portfolio item, this function isn't necessary
-/*(function($){
-$(window).load(function() {
 
-	var short_title = "";
-	var i = 0;
-	var j = 0;
-	var heights = new Array();
-	
-	$("#thumbs li .item-info h3 a").each(function(){
-		heights[i] = $(this).height();
-		i++;
-	})
-	heights.sort(function(a,b){return a-b});
-	var min_height = heights[0];
-	i = 0;
-	$("#thumbs li .item-info h3 a").each(function(){
-		item_info_height = $(this).height();
-		if (item_info_height > min_height){
-			item_info_height = 0;
-			var long_title = $(this).html();
-				while(item_info_height <= min_height){
-					i++;
-					
-					item_info_height = $(this).html(javascript_excerpt(long_title, i)).height();
-					//alert(javascript_excerpt(long_title, i));
-					$(this).html("");
-				}
-					//alert(javascript_excerpt(long_title, i - 1))
-					new_title = javascript_excerpt(long_title, i-2);
-
-
-					$(this).html(new_title)
-		}
-	})
- })
- })(jQuery);*/
 
 

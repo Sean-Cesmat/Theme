@@ -5,7 +5,7 @@ function my_admin_styles()
     wp_enqueue_style( 'bra_admin_style' );    
     wp_enqueue_style('thickbox'); 
 }
-add_action('admin_print_styles', 'my_admin_styles'); 
+add_action('admin_enqueue_scripts', 'my_admin_styles'); 
 
 function my_admin_scripts() {
     wp_enqueue_script('media-upload');
@@ -21,7 +21,8 @@ function my_admin_jquery() {
     wp_register_script("bra_dashboard_twitter", BRANKIC_ROOT."/includes/twitter.js"); 
     wp_enqueue_script('bra_dashboard_twitter');  
 }
-add_action('admin_print_scripts', 'my_admin_jquery');
+add_action('admin_enqueue_scripts', 'my_admin_jquery');
+add_action('admin_enqueue_scripts', 'my_admin_scripts');
 
 
 
@@ -270,7 +271,7 @@ function bra_form_submit()
 }
 
 if ( function_exists( 'add_image_size' ) ) { 
-    add_image_size( 'blog-square', 270, 270, true ); //300 pixels wide (and unlimited height)
+    add_image_size( 'blog-square', 270, 270, true );
 }
 
 function default_options()
@@ -295,7 +296,7 @@ function default_options()
     add_option(BRANKIC_VAR_PREFIX."contact_form_location", "Amsterdam");
     add_option(BRANKIC_VAR_PREFIX."contact_form_zoom", "15");  
 }
-if (get_option(BRANKIC_VAR_PREFIX."color") == "" || get_option(BRANKIC_VAR_PREFIX."use_captcha") == "" || get_option(BRANKIC_VAR_PREFIX."blog_single_page_style") == "" ) default_options();
+if (of_get_option(BRANKIC_VAR_PREFIX."color") == "" || of_get_option(BRANKIC_VAR_PREFIX."use_captcha") == "" || of_get_option(BRANKIC_VAR_PREFIX."blog_single_page_style") == "" ) default_options();
 
 
  add_action('wp_dashboard_setup', 'my_custom_dashboard_widgets');

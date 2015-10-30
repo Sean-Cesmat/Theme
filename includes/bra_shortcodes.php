@@ -1,33 +1,67 @@
 <?php
-/***************************/
-/*  Brankic WP SHORT CODES  */
-/***************************/
-
-
-function register_button( $buttons ) {
-   array_push( $buttons, "|", "bra_shortcodes" );
-   return $buttons;
+$version = get_bloginfo('version');
+if( version_compare( $version, 3.9, '<' ) ) 
+{
+	// < 3.9
+	function register_button( $buttons ) {
+	   array_push( $buttons, "|", "bra_shortcodes" );
+	   return $buttons;
+	}
+	
+	function add_plugin( $plugin_array ) {
+	   $plugin_array['bra_shortcodes'] = get_template_directory_uri() . '/includes/bra_shortcodes_old.js';
+	   return $plugin_array;
+	}
+	
+	function bra_shortcodes_button() {
+	
+	   if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
+		  return;
+	   }
+	
+	   if ( get_user_option('rich_editing') == 'true' ) {
+		  add_filter( 'mce_external_plugins', 'add_plugin' );
+		  add_filter( 'mce_buttons', 'register_button' );
+	   }
+	
+	}
+	
+	add_action('init', 'bra_shortcodes_button');
+}
+else
+{
+	// >= 3.9
+	
+	add_action('admin_head', 'gavickpro_add_my_tc_button');
+	
+	function gavickpro_add_my_tc_button() {
+		global $typenow;
+		// check user permissions
+		if ( !current_user_can('edit_posts') && !current_user_can('edit_pages') ) {
+		return;
+		}
+		// verify the post type
+		if( ! in_array( $typenow, array( 'post', 'page', 'portfolio_item' ) ) )
+			return;
+		// check if WYSIWYG is enabled
+		if ( get_user_option('rich_editing') == 'true') {
+			add_filter("mce_external_plugins", "gavickpro_add_tinymce_plugin");
+			add_filter('mce_buttons', 'gavickpro_register_my_tc_button');
+		}
+	}
+	
+	function gavickpro_add_tinymce_plugin($plugin_array) {
+		$plugin_array['gavickpro_tc_button'] = get_template_directory_uri() . '/includes/bra_shortcodes.js';
+		return $plugin_array;
+	}
+	
+	function gavickpro_register_my_tc_button($buttons) {
+	   array_push($buttons, "gavickpro_tc_button");
+	   return $buttons;
+	}
 }
 
-function add_plugin( $plugin_array ) {
-   $plugin_array['bra_shortcodes'] = get_template_directory_uri() . '/includes/bra_shortcodes.js';
-   return $plugin_array;
-}
 
-function bra_shortcodes_button() {
-
-   if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
-      return;
-   }
-
-   if ( get_user_option('rich_editing') == 'true' ) {
-      add_filter( 'mce_external_plugins', 'add_plugin' );
-      add_filter( 'mce_buttons', 'register_button' );
-   }
-
-}
-
-add_action('init', 'bra_shortcodes_button');
 
 /*******************************************************************************************************************
 * COLUMNS SHORTCODES                                                                                               *
@@ -280,7 +314,7 @@ function Bra_icon_box($atts, $content = null) {
      $html .=  "\n<div>";
      if ($url != "") $html .=  "\n<a href='$url' target='$target'>"; 
      $html .=  "\n<h2>$caption</h2>"; 
-     if ($icon != "") $html .=  "\n<img class='check_path' src='$icon' alt='' />";
+     if ($icon != "") $html .=  "\n<img class='check_path' src='$icon' alt='$caption' />";
      $html .=  "\n<p>" . no_wpautop($text) ."</p>";
      if ($url != "") $html .=  "\n</a>"; 
      $html .=  "\n</div>";
@@ -382,7 +416,7 @@ function Bra_portfolio($atts, $content = null) {
 * PORTFOLIO                                                                                                     *
 *                                                                                                                  *
 *******************************************************************************************************************/
-    extract(shortcode_atts(array("title" => "", "cat_id" => "", "no" => "-1", "show_filters" => "no", "columns" => "4", "shape" => "", "hover" => "", "height" => ""), $atts));
+    extract(shortcode_atts(array("title" => "", "cat_id" => "", "no" => "-1", "show_filters" => "no", "columns" => "4", "shape" => "", "hover" => "", "height" => "", "extra_images" => "no"), $atts));
     // The Query
     
     $fixed_height = "";
@@ -405,7 +439,7 @@ function Bra_portfolio($atts, $content = null) {
     'tax_query' => array(
         array(
             'taxonomy' => $taxonomy,
-            //'field' => $termID
+            'field' => 'term_id',
             'terms' => $cat_id
         )
     ),
@@ -427,16 +461,17 @@ function Bra_portfolio($atts, $content = null) {
     //$temp_array[4] = $termchildren[4]; 
     //$termchildren = $temp_array;    
     // end of subcats reordering
-    $html = "";
+    //print_r($termchildren);
+    $html = "\n";
     if ($title != "")
     {
     $html .= '<h3 class="title">' . $title . '</h3>';
     }
-    if ($show_filters != "no")
+    if ($show_filters != "no" & !empty($termchildren))
     {
     
     $html .=    '<div class="filterable"><ul id="portfolio-nav">';
-    $html .=    '<li class="current"><a href="#" data-filter="*">' . __('All', BRANKIC_THEME_SHORT) . '</a><span>/</span></li>';
+    $html .=    '<li class="current"><a href="#" data-filter="*">' . __('All', BRANKIC_THEME_SHORT) . '</a><span>/</span></li>' . "\n";
     $k = 0;
     foreach ($termchildren as $child) 
     {
@@ -445,7 +480,7 @@ function Bra_portfolio($atts, $content = null) {
         if ($term->name != "") $html .= '<li><a href="#" data-filter=".' . $term->slug . '">' . $term->name . '</a><span>/</span></li>';
     }
     
-    $html .= '</ul><!--END PORTFOLIO-NAV--></div><!--END FILTERABLE-->';
+    $html .= '</ul><!--END PORTFOLIO-NAV--></div><!--END FILTERABLE-->' . "\n";
     }
     
     $html .= '<div class="portfolio-grid">';
@@ -462,24 +497,31 @@ while ( $wp_query->have_posts() ) : $wp_query->the_post();
     $queried_post = get_post(get_the_ID());
     $excerpt = $queried_post->post_excerpt;
     
-    $featured_image_array = wp_get_attachment_image_src( get_post_thumbnail_id(), 'single-post-thumbnail' ); //original size
+    $featured_image_array_original = wp_get_attachment_image_src( get_post_thumbnail_id(), 'single-post-thumbnail' ); //original size
     
-    $featured_image_array_large = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large' ); //thumb size
+    $featured_image_array_large = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large' ); //large size
+	
+	$featured_image_array_medium = wp_get_attachment_image_src( get_post_thumbnail_id(), 'medium' ); //medium size
     
-    $featured_image_array_small = wp_get_attachment_image_src( get_post_thumbnail_id(), 'blog-square' ); //square size
+    $featured_image_array_square = wp_get_attachment_image_src( get_post_thumbnail_id(), 'blog-square' ); //square size
     
-    $large_image = $featured_image_array[0];
+    $original_size_image = $featured_image_array_original[0];
+	$large_size_image = $featured_image_array_large[0];
+	$medium_size_image = $featured_image_array_medium[0];
+	$square_size_image = $featured_image_array_square[0];
     
     if ($excerpt == "") $excerpt = bra_excerpt(20);
     
     if ($shape != "" && $shape != "triangle") 
     {
-        $featured_image = $featured_image_array_small[0]; 
+        $thumb_image = $square_size_image; 
     }
     else 
     {
-        $featured_image = $featured_image_array_large[0]; 
+        $thumb_image = $medium_size_image; 
+		if ($columns == "2") $thumb_image = $large_size_image;
     }
+	$pop_up_image = $original_size_image;
     
     $video_link = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."video_link", true);
     $subtitle = get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."subtitle", true); 
@@ -497,12 +539,25 @@ while ( $wp_query->have_posts() ) : $wp_query->the_post();
         $name_list = join( ", ", $names );
         $slug_list = join( " ", $slugs ); 
     endif;
-    if ($shape != "") $html .= '<li class="item ' . $slug_list . '" ><div class="item-container">'; 
+    if ($shape != "") $html .= "\n" . '<li class="item ' . $slug_list . '" ><div class="item-container">'; 
     else $html .= '<li class="col' . $columns . ' item ' . $slug_list . $fixed_height . '" style="height:' . $height . '; overflow:hidden">';
+    $slug_list_ = "pretty_photo_gallery";
     
-    if ($hover == "no") 
+	if ($hover == "no" || $hover == "no_with_pop_up") 
     {
-        $html .= '<a href="' . $permalink . '"><img src="' . $featured_image . '" alt="" /></a>';
+		if ($video_link != "") 
+		{
+			$pop_up_image = $video_link;
+		}
+		else
+		{
+			$pop_up_image = $original_size_image;
+		}
+        
+		if ($hover == "no_with_pop_up" && $extra_images == "yes") $html .= '<a href="' . $pop_up_image . '" data-rel="prettyPhoto[' . $title . ']"><img src="' . $thumb_image . '" alt="' . $title . '" /></a>';
+		if ($hover == "no_with_pop_up" && $extra_images != "yes") $html .= '<a href="' . $pop_up_image . '" data-rel="prettyPhoto[' . $slug_list_ . ']"><img src="' . $thumb_image . '" alt="' . $title . '" /></a>';
+		
+        if ($hover == "no") $html .= '<a href="' . $permalink . '"><img src="' . $thumb_image . '" alt="' . $title . '" /></a>';
         
         if ($shape != "")  
         {
@@ -510,16 +565,27 @@ while ( $wp_query->have_posts() ) : $wp_query->the_post();
             $html .= '<div class="item-info-overlay"><div><h3 class="title"><a href="' . $permalink . '">' . $title . '</a></h3><h4 class="no_title"> ' . $name_list . '</h4>';
             $html .= '<p>' . $excerpt . '</p>';
             $html .= '<a href="' . $permalink . '" class="view">details</a>';
-            $html .= '<a title="' . $title . ' / ' . $name_list . '" href="' . $large_image . '" class="preview" data-rel="prettyPhoto[' . $slug_list_ . ']">preview</a>';
+            
+			if ($extra_images == "yes") $html .= '<a title="' . $title . ' / ' . $name_list . '" href="' . $pop_up_image . '" class="preview" data-rel="prettyPhoto[' . $title . ']">preview</a>';
+			else $html .= '<a title="' . $title . ' / ' . $name_list . '" href="' . $pop_up_image . '" class="preview" data-rel="prettyPhoto[' . $slug_list_ . ']">preview</a>';
+			
             $html .= '</div></div><!--END ITEM-INFO-OVERLAY-->';
         }
-        else $html .= '<div class="col' . $columns . ' item-info"><h3 class="title"><a href="' . $permalink . '">' . $title . '</a></h3></div>'; 
+        else 
+        {
+            
+			if ($hover == "no_with_pop_up"  && $extra_images == "yes") $html .= '<div class="col' . $columns . ' item-info no_hover"><h3 class="title">' . $title . '</h3></div>';
+			if ($hover == "no_with_pop_up"  && $extra_images != "yes") $html .= '<div class="col' . $columns . ' item-info no_hover"><h3 class="title">' . $title . '</h3></div>';
+            
+			if ($hover == "no") $html .= '<div class="col' . $columns . ' item-info no_hover"><h3 class="title"><a href="' . $permalink . '">' . $title . '</a></h3></div>';
+        }
+         
         
 
     }
     else
     {
-        $html .= '<img src="' . $featured_image . '" alt="" />';
+        $html .= '<img src="' . $thumb_image . '" alt="' . $title . '" />';
         
         if ($shape != "")  $html .= '</div>';
         else $html .= '<div class="col' . $columns . ' item-info"><h3 class="title"><a href="' . $permalink . '">' . $title . '</a></h3></div>';
@@ -530,17 +596,68 @@ while ( $wp_query->have_posts() ) : $wp_query->the_post();
         $html .= '<p>' . $excerpt . '</p>';
         $html .= '<a href="' . $permalink . '" class="view">details</a>';
         
-        if ($video_link != "") $large_image = $video_link;
+        if ($video_link != "") $pop_up_image = $video_link;
         
-        $slug_list_ = "pretty_photo_gallery";
-        
-        $html .= '<a title="' . $title . ' / ' . $name_list . '" href="' . $large_image . '" class="preview" data-rel="prettyPhoto[' . $slug_list_ . ']">preview</a>';
+        if ($extra_images == "yes") $html .= '<a title="' . $title . ' / ' . $name_list . '" href="' . $pop_up_image . '" class="preview" data-rel="prettyPhoto[' . $title . ']">preview</a>';
+		else $html .= '<a title="' . $title . ' / ' . $name_list . '" href="' . $pop_up_image . '" class="preview" data-rel="prettyPhoto[' . $slug_list_ . ']">preview</a>';
         $html .= '</div></div><!--END ITEM-INFO-OVERLAY-->';
     }
+	if ($extra_images == "yes") 
+	{
+
+		// show extra images in pop-up
+		  $extra_images_no = of_get_option(BRANKIC_VAR_PREFIX."extra_images_no");
+		  if ($extra_images_no == "") $extra_images_no = 20;
+		  $post_ID = $post->ID;
+		  
+		  for ($i = 1 ; $i <= $extra_images_no ; $i++)
+		  {                                                                               
+                if (class_exists('MultiPostThumbnails')  && MultiPostThumbnails::has_post_thumbnail('portfolio_item', "extra-image-" . $i . "")  ) :
+                    $image_id = MultiPostThumbnails::get_post_thumbnail_id( 'portfolio_item', "extra-image-" . $i . "", $post_ID );
+                                
+                    $image_feature_url = wp_get_attachment_image_src( $image_id, "portfolio_item_extra-image-" . $i . "" );
+                    $portfolio_item_extra_images[] = $image_feature_url[0];
+                    
+                    $portfolio_item_caption = "portfolio_item_extra-image-" . $i . "_caption";  
+                    $portfolio_item_captions[$i-1] = get_post_meta($post_ID, $portfolio_item_caption, true);
+
+                    
+                endif;
+				
+				if (class_exists('MultiPostThumbnails')  && MultiPostThumbnails::has_post_thumbnail('post', "extra-image-" . $i . "") ) :
+                    $image_id = MultiPostThumbnails::get_post_thumbnail_id( 'post', "extra-image-" . $i . "", $post_ID );
+                    
+                    $image_feature_url = wp_get_attachment_image_src( $image_id, "post_extra-image-" . $i . "" );
+                    $post_extra_images[] = $image_feature_url[0];
+                  
+                    $post_caption = "post_extra-image-" . $i . "_caption";  
+                    $post_captions[$i-1] = get_post_meta($post_ID, $post_caption, true);
+
+                    
+                endif;
+		  }
+		  
+		  
+		  for($i = 0 ; $i < $extra_images_no ; $i++)
+		  {
+			  if (isset($portfolio_item_extra_images[$i]))
+			  {
+				  $html .= '<a href="' . $portfolio_item_extra_images[$i] . '" rel="prettyPhoto[' . $title . ']" title="' . $title . ' - ' . $portfolio_item_captions[$i] . '"></a>' . "\n";
+			  }
+			  
+			  if (isset($post_extra_images[$i]))
+			  {
+				  $html .= '<a href="' . $post_extra_images[$i] . '" rel="prettyPhoto[' . $title . ']" title="' . $title . ' - ' . $post_captions[$i] . '"></a>' . "\n";
+			  }
+		  }
+		  
+		  unset($portfolio_item_extra_images);
+		  unset($post_extra_images);
+	}
     
     
 
-    $html .= '</li>';
+    $html .= '</li>' . "\n";
 endwhile;
 
 $wp_query = $temp;  //reset back to original query

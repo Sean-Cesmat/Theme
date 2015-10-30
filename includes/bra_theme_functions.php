@@ -53,20 +53,22 @@ function extra_images_exists()
 {
     global $post, $query_string;
     $return_value = false;
-    $extra_images_no = get_option(BRANKIC_VAR_PREFIX."extra_images_no");
+    $bg_image = false;
+    $extra_images_no = of_get_option(BRANKIC_VAR_PREFIX."extra_images_no");
     if ($extra_images_no == "") $extra_images_no = 20;
     for ($i = 1 ; $i <= $extra_images_no ; $i++)
-        {
-                                                                                          
+        {                                                                                          
             if (class_exists('MultiPostThumbnails')  && MultiPostThumbnails::has_post_thumbnail('page', "extra-image-" . $i . "")) :
                  $return_value = true; endif; 
             if (class_exists('MultiPostThumbnails')  && MultiPostThumbnails::has_post_thumbnail('post', "extra-image-" . $i . "")) :
                  $return_value = true; endif; 
             if (class_exists('MultiPostThumbnails')  && MultiPostThumbnails::has_post_thumbnail('portfolio_item', "extra-image-" . $i . "")) :
                  $return_value = true; endif; 
-            if (get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."background_image", true) == "extra-image-" . $i) $return_value = false;    
+            if (get_post_meta(get_the_ID(), BRANKIC_VAR_PREFIX."background_image", true) == "extra-image-" . $i) $bg_image = true;    
             
         }
+        if ($bg_image && $return_value == false) $return_value = false;
+        if ($bg_image && $return_value == true) $return_value = true; 
         return $return_value;
 }
 
@@ -78,7 +80,7 @@ function extra_images_exists()
     //$parents = get_category_parents(get_cat_ID( $category ), false, ',');
     //$parents = explode(",", $parents);
     
-    
+    $page_id = 1;
     $terms = get_the_terms( $post_id, 'portfolio_category' );
                         
     if ( $terms && ! is_wp_error( $terms ) )
@@ -103,7 +105,6 @@ function extra_images_exists()
     foreach ($results as $result) 
     {
         $page_id = $result->ID;
-        //echo "XX $page_id ";
     }
     return get_page_link($page_id);
 
@@ -111,7 +112,7 @@ function extra_images_exists()
 
 function bra_is_youtube($video_url)
 {
-    if (strpos($video_url, "youtube.com")) return 1; else return 0;
+    if (strpos($video_url, "youtube.com") || strpos($video_url, "youtu.be")) return 1; else return 0;
 }
 function bra_is_vimeo($video_url)
 {
@@ -129,11 +130,15 @@ function bra_is_mov($video_url)
 function bra_get_youtube_id($url)
 {
     preg_match('#http://w?w?w?.?youtube.com/watch\?v=([A-Za-z0-9\-_]+)#s', $url, $matches);
+    if ($matches[1] == "")
+    {
+        preg_match('#http://w?w?w?.?youtu.be/([A-Za-z0-9\-_]+)#s', $url, $matches);
+    }
     return $matches[1];
 }
 function bra_get_vimeo_id($url)
 {
-    preg_match('#http://w?w?w?.?vimeo.com/([A-Za-z0-9\-_]+)#s', $url, $matches);
+    preg_match('#https?://w?w?w?.?vimeo.com/([A-Za-z0-9\-_]+)#s', $url, $matches);
     return $matches[1];
 }
 
@@ -301,6 +306,7 @@ remove_action('wp_head', 'wp_generator');
 if ( function_exists('register_sidebar') ) {
     register_sidebar(array(
         'name' => 'Default',
+		'id' => 'default',
         'description' => 'Default sidebar',
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget' => '</div>',
@@ -369,7 +375,8 @@ if ( function_exists('register_sidebar') ) {
     ));
     
     register_sidebar(array(
-        'name' => '1',
+        'name' => 'Optional 1',
+		'id' => 'optional_1',
         'description' => 'Optional sidebar',
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget' => '</div>',
@@ -378,7 +385,8 @@ if ( function_exists('register_sidebar') ) {
     ));
 
     register_sidebar(array(
-        'name' => '2',
+        'name' => 'Optional 2',
+		'id' => 'optional_2',
         'description' => 'Optional sidebar',
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget' => '</div>',
@@ -387,7 +395,8 @@ if ( function_exists('register_sidebar') ) {
     ));
 
     register_sidebar(array(
-        'name' => '3',
+        'name' => 'Optional 3',
+		'id' => 'optional_3',
         'description' => 'Optional sidebar',
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget' => '</div>',
@@ -399,11 +408,15 @@ if ( function_exists('register_sidebar') ) {
 // end of sidebars
 
 function my_scripts_method() {
-    //global $root, $post, $var_prefix; 
+    //global $root, $post, $var_prefix;
+	
+	//wp_register_script("isotope", BRANKIC_ROOT."/javascript/jquery.isotope.min.js");
+	
     
     wp_enqueue_style("default_stylesheet", BRANKIC_ROOT."/style.css");
+ 
     wp_enqueue_style("style", BRANKIC_ROOT."/css/style.css");
-    wp_enqueue_style("css_color_style", BRANKIC_ROOT."/css/colors/color-".get_option(BRANKIC_VAR_PREFIX."color").".css");
+    wp_enqueue_style("css_color_style", BRANKIC_ROOT."/css/colors/color-".of_get_option(BRANKIC_VAR_PREFIX."color").".css");
     wp_enqueue_style("blog", BRANKIC_ROOT."/css/blog.css");
     
     wp_enqueue_style("socialize-bookmarks", BRANKIC_ROOT."/css/socialize-bookmarks.css");
@@ -415,14 +428,14 @@ function my_scripts_method() {
     wp_enqueue_style("prettyPhoto", BRANKIC_ROOT."/css/prettyPhoto.css");
     wp_enqueue_script("prettyPhoto", BRANKIC_ROOT."/javascript/prettyPhoto.js");
     
-    wp_enqueue_script("isotope", BRANKIC_ROOT."/javascript/jquery.isotope.min.js");
+    wp_enqueue_script("isotope", BRANKIC_ROOT."/javascript/jquery.isotope.min.js"); 
     
     wp_enqueue_script("jquery_flexslider", BRANKIC_ROOT."/javascript/jquery.flexslider.js");
     wp_enqueue_style("jquery_flexslider", BRANKIC_ROOT."/css/flexslider.css");  
     
     wp_enqueue_script("backstretch", BRANKIC_ROOT."/javascript/jquery.backstretch.min.js"); 
     
-    $layout = get_option(BRANKIC_VAR_PREFIX."boxed_stretched");
+    $layout = of_get_option(BRANKIC_VAR_PREFIX."boxed_stretched");
     if (isset($_GET["layout"])) 
     {
         if ($_GET["layout"] == "stretched") $layout = "stretched" ;
@@ -430,6 +443,19 @@ function my_scripts_method() {
     }
     
     if ($layout == "stretched") wp_enqueue_style("style-stretched", BRANKIC_ROOT."/css/style-stretched.css");
+    
+    $disable_responsive = of_get_option(BRANKIC_VAR_PREFIX."disable_responsive");
+    if ($disable_responsive != "yes") 
+    {
+        wp_enqueue_style("media_queries", BRANKIC_ROOT."/css/media_queries.css");
+        
+        add_action('wp_head', 'responsive_meta_tags');
+        function responsive_meta_tags()
+        {
+           echo '<meta name="viewport" content="initial-scale=1, maximum-scale=1" />';
+           echo '<meta name="viewport" content="width=device-width" />'; 
+        }
+    }
     
     wp_enqueue_script("google_map_api", "http://maps.googleapis.com/maps/api/js?sensor=false");
     wp_enqueue_script("google_map_plugin", BRANKIC_ROOT."/javascript/google_map_plugin.js"); 
@@ -440,23 +466,18 @@ function my_scripts_method() {
     if ( is_singular() ) wp_enqueue_script( "comment-reply" );
     
 
-
-    if (get_option(BRANKIC_VAR_PREFIX."pinned_menu") != "no") 
-    {
+    
+    if (of_get_option(BRANKIC_VAR_PREFIX."pinned_menu") != "no") 
+    {   
         wp_enqueue_script("bra_header", BRANKIC_ROOT."/javascript/header.js");
-    }
-
-    
-
-    
-    if (get_option(BRANKIC_VAR_PREFIX."show_panel") == "yes") 
-    {
-        //wp_enqueue_script("theme_options", BRANKIC_ROOT."/javascript/theme-option.js");
     }
     
      
   
 }    
+
+add_filter('widget_text', 'do_shortcode');
+add_filter( 'the_excerpt', 'do_shortcode');
  
 add_action('wp_enqueue_scripts', 'my_scripts_method');
 
@@ -482,6 +503,7 @@ function create_post_type() {
             
         )
     );
+    flush_rewrite_rules();
 }
 
 
@@ -513,7 +535,7 @@ function create_portfolio_category_taxonomies()
     'rewrite' => array( 'slug' => 'portfolio_category' ),
   ));
   
-  require_once (BRANKIC_INCLUDES . 'bra_create_portfolio_select.php');
+  //require_once (BRANKIC_INCLUDES . 'bra_create_portfolio_select.php');
 }
 
 

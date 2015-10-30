@@ -207,8 +207,13 @@ table.form-table tr.bottom_border{
 	border-bottom-color: #DFDFDF;
 	margin-bottom: 10px;
 }
+#TB_overlay {
+  z-index: 1000!important;
+}
 
-
+i.gavickpro-own-icon {
+	background-image: url('bra_shortcodes.ico');
+}
 #brankic_shortcode_form {
 }
 #brankic_shortcode_form label {

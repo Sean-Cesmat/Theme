@@ -28,7 +28,7 @@ jQuery(document).ready(function($)
 			if (window_y > scroll_critical) {
 				if (!($("#header-wrapper").hasClass("fixed"))){
 						$("#header-wrapper").hide();
-						//$("#wrapper").css("margin-top", header_h + "px");
+						$("#wrapper").css("margin-top", header_h + "px");
 						$("#header-wrapper").addClass("fixed").css("top", wp_admin_height);
 						$("#header-wrapper").fadeIn(500);
 						$logo2_link.fadeIn().appendTo(".header");
@@ -37,10 +37,10 @@ jQuery(document).ready(function($)
 				
 			} else {
 				if (($("#header-wrapper").hasClass("fixed"))){
-					$("#header-wrapper").fadeOut(200, function(){
+					$("#header-wrapper").fadeOut(500, function(){
 						$("#header-wrapper").removeClass("fixed");
-						//$("#wrapper").css("margin-top", "");
-						$("#header-wrapper").fadeIn(200)
+						$("#wrapper").css("margin-top", "");
+						$("#header-wrapper").fadeIn(300)
 					});
 					
 					$logo2_link.fadeOut().remove();
